@@ -3,114 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KFC GLOBAL - AI INVEST</title>
+    <title>KFC GLOBAL - AI INVEST PRO</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --primary: #00ff88; --bg: #050a08; --card: #0d1a15; }
         body { background-color: var(--bg); color: white; font-family: 'Cairo', sans-serif; overflow-x: hidden; }
-        .glass { background: rgba(13, 26, 21, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(0, 255, 136, 0.1); }
-        .nav-bottom { background: rgba(5, 10, 8, 0.95); position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #1a3329; z-index: 1000; }
-        .nav-item { color: #4b6b5d; font-size: 11px; text-align: center; }
-        .nav-item.active { color: var(--primary); }
+        .glass { background: rgba(13, 26, 21, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(0, 255, 136, 0.1); }
+        .nav-bottom { background: rgba(5, 10, 8, 0.98); position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #1a3329; z-index: 1000; }
+        .nav-item { color: #4b6b5d; font-size: 11px; text-align: center; transition: 0.3s; }
+        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
         .page { display: none; padding-bottom: 120px; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .btn-main { background: linear-gradient(45deg, #00ff88, #00bd65); color: #050a08; font-weight: 800; border-radius: 16px; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
         .modal.active { display: flex; }
+        .monthly-badge { background: rgba(0, 255, 136, 0.1); color: var(--primary); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: bold; border: 1px solid rgba(0, 255, 136, 0.2); }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div id="tier-modal" class="modal" onclick="closeModal()">
-        <div class="glass p-8 rounded-[32px] w-full max-w-sm text-center border-t-4 border-green-500" onclick="event.stopPropagation()">
-            <i id="m-icon" class="text-5xl mb-4"></i>
-            <h3 id="m-title" class="text-2xl font-black mb-2"></h3>
-            <div id="m-desc" class="text-sm text-gray-400 space-y-3 mb-6 text-right"></div>
-            <button onclick="closeModal()" class="w-full btn-main py-4">فهمت ذلك</button>
+        <div class="glass p-8 rounded-[40px] w-full max-w-sm text-center border-t-8 border-green-500 shadow-[0_0_50px_rgba(0,255,136,0.1)]" onclick="event.stopPropagation()">
+            <div id="m-icon-bg" class="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-black/40">
+                <i id="m-icon" class="text-4xl"></i>
+            </div>
+            
+            <h3 id="m-title" class="text-2xl font-black mb-1"></h3>
+            <div class="monthly-badge mb-6 inline-block">العائد الشهري: <span id="m-monthly"></span></div>
+            
+            <div class="text-right space-y-4 mb-8">
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest border-b border-white/5 pb-2">مميزات الطبقة الحصرية</p>
+                <div id="m-desc" class="text-sm text-gray-300 space-y-3"></div>
+            </div>
+
+            <button onclick="goToPay()" class="w-full btn-main py-5 text-lg shadow-[0_10px_30px_rgba(0,255,136,0.2)]">إكمال الاشتراك الآن <i class="fas fa-bolt ml-2"></i></button>
+            <button onclick="closeModal()" class="mt-4 text-xs text-gray-600 font-bold uppercase tracking-widest">إغلاق</button>
         </div>
     </div>
 
-    <div id="auth-screen" class="page active px-8 flex flex-col items-center justify-center min-h-screen">
-        <div class="mb-8 relative">
-            <div class="w-24 h-24 bg-green-500/20 rounded-[30%] rotate-45 border-2 border-green-500 flex items-center justify-center shadow-[0_0_50px_rgba(0,255,136,0.2)]">
-                <i class="fas fa-microchip text-4xl text-green-500 -rotate-45"></i>
+    <div id="main-app">
+        
+        <div id="auth-screen" class="page active px-8 flex flex-col items-center justify-center min-h-screen text-center">
+            <div class="mb-8 relative animate-bounce">
+                <div class="w-24 h-24 bg-green-500/20 rounded-[30%] rotate-45 border-2 border-green-500 flex items-center justify-center shadow-[0_0_50px_rgba(0,255,136,0.2)]">
+                    <i class="fas fa-microchip text-4xl text-green-500 -rotate-45"></i>
+                </div>
             </div>
-        </div>
-        
-        <h1 class="text-3xl font-black mb-2 tracking-tighter uppercase text-center">KFC <span class="text-green-500">AI GLOBAL</span></h1>
-        
-        <div class="glass p-5 rounded-2xl mb-8 text-center border-green-500/10">
-            <p class="text-xs text-gray-400 leading-relaxed">
-                مرحباً بك في المنصة الرائدة عالمياً لاستثمار الأصول الرقمية بالذكاء الاصطناعي. نحن نوفر لك عوائد يومية ثابتة ونظام حماية متطور لضمان نمو ثروتك بأمان.
-            </p>
+            <h1 class="text-4xl font-black mb-2 tracking-tighter">KFC <span class="text-green-500 font-normal">AI GLOBAL</span></h1>
+            <p class="text-xs text-gray-500 mb-10 max-w-[250px] mx-auto leading-relaxed">المنصة الأذكى عالمياً لتوليد الأرباح عبر تداول الأصول الرقمية بالذكاء الاصطناعي</p>
+            
+            <div class="w-full space-y-4 max-w-sm">
+                <input id="email" type="email" placeholder="البريد الإلكتروني" class="w-full p-5 bg-white/5 border border-green-900 rounded-2xl outline-none focus:border-green-500 transition-all">
+                <input id="phone" type="tel" placeholder="رقم الهاتف" class="w-full p-5 bg-white/5 border border-green-900 rounded-2xl outline-none focus:border-green-500 transition-all">
+                <button onclick="handleAuth('login')" class="w-full btn-main p-5 text-xl">ابدأ رحلة الثراء</button>
+            </div>
         </div>
 
-        <div class="w-full space-y-4">
-            <div class="relative">
-                <i class="fas fa-envelope absolute left-4 top-5 text-green-900"></i>
-                <input id="email" type="email" placeholder="البريد الإلكتروني" class="w-full p-4 pl-12 bg-white/5 border border-green-900 rounded-2xl outline-none focus:border-green-500">
-            </div>
-            <div class="relative">
-                <i class="fas fa-phone absolute left-4 top-5 text-green-900"></i>
-                <input id="phone" type="tel" placeholder="رقم الهاتف" class="w-full p-4 pl-12 bg-white/5 border border-green-900 rounded-2xl outline-none focus:border-green-500">
-            </div>
-            <button onclick="handleAuth('login')" class="w-full btn-main p-4 shadow-xl text-lg">بدء الاستثمار الآن</button>
-            <p class="text-[10px] text-center text-gray-600">تسجيلك يعني موافقتك على شروط الخصوصية العالمية</p>
-        </div>
-    </div>
-
-    <div id="main-app" style="display:none">
-        <div id="page-home" class="page active px-5 pt-8">
+        <div id="page-home" class="page px-5 pt-8">
             <div class="flex justify-between items-center mb-8">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-black font-black">U</div>
-                    <p id="user-p" class="text-xs font-bold text-gray-400"></p>
+                <div>
+                    <p class="text-[10px] text-gray-500 font-bold uppercase">الحالة: متصل بنظام AI</p>
+                    <h2 id="user-p" class="text-lg font-black text-green-500">جاري التحميل...</h2>
                 </div>
-                <div class="bg-green-500/10 px-3 py-1 rounded-full border border-green-500/20 text-[10px] text-green-500 font-bold uppercase tracking-tighter">Verified AI Account</div>
-            </div>
-
-            <div class="bg-gradient-to-br from-[#0d1a15] to-black p-8 rounded-[32px] mb-8 border border-white/5 shadow-2xl">
-                <p class="text-[10px] text-green-400 font-bold mb-2 uppercase tracking-[3px]">الرصيد الكلي المتاح</p>
-                <div class="flex items-baseline gap-2">
-                    <span class="text-4xl font-black text-gray-500">$</span>
-                    <span id="balance" class="text-6xl font-black tracking-tighter">0.00</span>
-                </div>
-                <div class="flex gap-3 mt-8">
-                    <button onclick="switchPage('recharge')" class="flex-1 btn-main py-3 text-xs">إيداع</button>
-                    <button onclick="switchPage('team')" class="flex-1 bg-white/5 py-3 rounded-xl text-xs font-bold border border-white/10">دعوة فريق</button>
+                <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10" onclick="switchPage('team')">
+                    <i class="fas fa-user-friends text-green-400"></i>
                 </div>
             </div>
 
-            <h3 class="font-bold text-lg mb-4 flex items-center gap-2">خطط الأصول المتاحة <span class="text-[9px] bg-green-900 text-green-300 px-2 rounded-full">اضغط للمزايا</span></h3>
+            <div class="bg-gradient-to-br from-[#0d1a15] to-black p-8 rounded-[40px] mb-10 border border-green-500/10 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fas fa-shield-virus text-6xl"></i></div>
+                <p class="text-[10px] text-green-400 font-bold mb-2 uppercase tracking-[3px]">إجمالي الأصول الموحدة</p>
+                <h3 class="text-6xl font-black tracking-tighter">$<span id="balance">0.00</span></h3>
+                <div class="flex gap-4 mt-8">
+                    <button onclick="switchPage('recharge')" class="flex-1 btn-main py-4 text-xs">إيداع (Deposit)</button>
+                    <button onclick="switchPage('team')" class="flex-1 glass py-4 rounded-xl text-xs font-bold border-white/5">فريق (Team)</button>
+                </div>
+            </div>
+
+            <h3 class="font-black text-xl mb-6 flex items-center gap-3">
+                <span class="w-2 h-8 bg-green-500 rounded-full"></span>
+                قاعة استثمار الطبقات
+            </h3>
             <div id="plans-container" class="space-y-4"></div>
         </div>
 
         <div id="page-recharge" class="page px-6 pt-10">
-            <div class="glass p-8 rounded-[32px] text-center">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-40 mx-auto mb-6 rounded-2xl">
-                <div class="bg-black/50 p-4 rounded-2xl border border-green-500/30 text-[10px] mb-6">TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2</div>
-                <button onclick="copyAddr()" class="w-full btn-main py-4">نسخ العنوان</button>
-            </div>
-        </div>
-
-        <div id="page-team" class="page px-6 pt-10 text-center">
-            <div class="glass p-10 rounded-[32px] mb-6">
-                <i class="fas fa-link text-4xl text-green-500 mb-4"></i>
-                <h3 class="text-xl font-bold mb-2">رابط الإحالة</h3>
-                <p class="text-xs text-gray-500 mb-6 font-mono">https://kfc-global.io/join?ref=77321</p>
-                <button onclick="alert('تم نسخ الرابط!')" class="w-full btn-main py-4">مشاركة الفريق</button>
+            <div class="glass p-8 rounded-[40px] text-center border-2 border-green-500/20">
+                <h2 class="text-2xl font-black mb-8">مركز الشحن الآمن</h2>
+                <div class="bg-white p-4 w-48 h-48 mx-auto rounded-3xl mb-8 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-full">
+                </div>
+                <p class="text-[11px] text-gray-500 mb-2 font-mono uppercase tracking-widest">Network: TRC20</p>
+                <div class="bg-black/50 p-5 rounded-2xl border border-green-500/20 font-mono text-[10px] mb-8 break-all select-all">TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2</div>
+                <button onclick="copyAddr()" class="w-full btn-main py-5 text-lg">نسخ عنوان المحفظة</button>
             </div>
         </div>
 
         <nav class="nav-bottom">
-            <div class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-home text-xl block mb-1"></i>الرئيسية</div>
-            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-wallet text-xl block mb-1"></i>إيداع</div>
-            <div class="nav-item" onclick="switchPage('team', this)"><i class="fas fa-users text-xl block mb-1"></i>فريق</div>
-            <div class="nav-item" onclick="location.href='mailto:USDT@gmail.com'"><i class="fas fa-envelope text-xl block mb-1"></i>الدعم</div>
+            <div class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-rocket text-xl block mb-1"></i>الاستثمار</div>
+            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-wallet text-xl block mb-1"></i>المحفظة</div>
+            <div class="nav-item" onclick="location.href='mailto:USDT@gmail.com'"><i class="fas fa-headset text-xl block mb-1"></i>الدعم</div>
+            <div class="nav-item" onclick="location.reload()"><i class="fas fa-redo-alt text-xl block mb-1"></i>تحديث</div>
         </nav>
     </div>
 
@@ -120,20 +117,25 @@
         const _s = supabase.createClient(S_URL, S_KEY);
 
         const tiers = [
-            { id: 1, cost: 100, daily: 15, name: "Platinum Layer", color: "#e5e4e2", icon: "fas fa-shield-alt", perks: ["سحب أسبوعي مجاني", "عائد سنوي 450%", "دعم عملاء أساسي"] },
-            { id: 2, cost: 300, daily: 55, name: "Diamond Layer", color: "#b9f2ff", icon: "fas fa-gem", perks: ["سحب مرتين أسبوعياً", "عائد سنوي 600%", "مدير حساب مخصص"] },
-            { id: 3, cost: 600, daily: 130, name: "Emerald Tier", color: "#50c878", icon: "fas fa-leaf", perks: ["سحب يومي فوري", "عمولة فريق إضافية 5%", "وصول مبكر للعروض"] },
-            { id: 4, cost: 1000, daily: 260, name: "Black Oracle", color: "#00ff88", icon: "fas fa-eye", perks: ["سحب غير محدود", "عضوية النادي الذهبي", "تأمين كامل على الأصول"] }
+            { id: 1, cost: 100, daily: 15, monthly: 450, name: "Platinum Layer", color: "#e5e4e2", icon: "fas fa-shield-alt", perks: ["سحب أسبوعي مجاني", "عائد سنوي تراكمي 450%", "حماية أصول المستوى 1"] },
+            { id: 2, cost: 300, daily: 55, monthly: 1650, name: "Diamond Layer", color: "#b9f2ff", icon: "fas fa-gem", perks: ["سحب مرتين أسبوعياً", "عائد سنوي تراكمي 600%", "مدير حساب AI مخصص"] },
+            { id: 3, cost: 600, daily: 130, monthly: 3900, name: "Emerald Tier", color: "#50c878", icon: "fas fa-leaf", perks: ["سحب يومي فوري", "عمولة فريق إضافية 5%", "وصول مبكر لعروض الـ Pre-sale"] },
+            { id: 4, cost: 1000, daily: 260, monthly: 7800, name: "Black Oracle", color: "#00ff88", icon: "fas fa-eye", perks: ["سحب غير محدود 24/7", "عضوية النادي الذهبي الخاصة", "تأمين كامل ضد تقلبات السوق"] }
         ];
 
         function renderTiers() {
             document.getElementById('plans-container').innerHTML = tiers.map(t => `
-                <div class="glass p-5 flex justify-between items-center rounded-3xl" style="border-right: 4px solid ${t.color}" onclick="openModal(${t.id})">
+                <div class="glass p-6 flex justify-between items-center rounded-[30px] border-r-4 shadow-lg transition active:scale-95" style="border-right-color: ${t.color}" onclick="openModal(${t.id})">
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-black/40"><i class="${t.icon} text-xl" style="color: ${t.color}"></i></div>
-                        <div><p class="font-black text-sm uppercase" style="color: ${t.color}">${t.name}</p><p class="text-[10px] text-green-500">العائد: $${t.daily}/يوم</p></div>
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-black/40 border border-white/5 shadow-inner">
+                            <i class="${t.icon} text-2xl" style="color: ${t.color}"></i>
+                        </div>
+                        <div>
+                            <p class="font-black text-sm uppercase" style="color: ${t.color}">${t.name}</p>
+                            <p class="text-[10px] text-green-500 font-bold">عائد يومي ثابت: $${t.daily}</p>
+                        </div>
                     </div>
-                    <i class="fas fa-chevron-left text-gray-700 text-xs"></i>
+                    <div class="bg-green-500/10 p-2 rounded-full"><i class="fas fa-plus text-[10px] text-green-500"></i></div>
                 </div>
             `).join('');
         }
@@ -144,16 +146,19 @@
             document.getElementById('m-title').style.color = t.color;
             document.getElementById('m-icon').className = t.icon;
             document.getElementById('m-icon').style.color = t.color;
+            document.getElementById('m-monthly').innerText = "$" + t.monthly;
             document.getElementById('m-desc').innerHTML = t.perks.map(p => `<div><i class="fas fa-check-circle ml-2 text-green-500"></i> ${p}</div>`).join('');
             document.getElementById('tier-modal').classList.add('active');
         }
 
         function closeModal() { document.getElementById('tier-modal').classList.remove('active'); }
+        function goToPay() { closeModal(); switchPage('recharge'); }
+        function copyAddr() { navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2'); alert('تم النسخ! يرجى إرسال المبلغ المخصص للطبقة.'); }
 
         async function handleAuth(type) {
             const e = document.getElementById('email').value;
             const p = document.getElementById('phone').value;
-            if(!e || !p) return alert("أكمل البيانات");
+            if(!e || !p) return alert("يرجى إدخال البيانات");
             let { data: user } = await _s.from('users').select('*').eq('email', e).single();
             if(!user) {
                 const { data: n } = await _s.from('users').insert([{ email:e, phone:p, balance:0 }]).select().single();
@@ -167,7 +172,7 @@
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('balance').innerText = u.balance.toFixed(2);
-            document.getElementById('user-p').innerText = "ID: " + u.phone;
+            document.getElementById('user-p').innerText = "مرحباً: " + u.phone;
             renderTiers();
         }
 
