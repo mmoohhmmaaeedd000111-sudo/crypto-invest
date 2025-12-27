@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KFC GLOBAL - THE FUTURE OF AI WEALTH</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>KFC GLOBAL - PREMIER INVESTMENT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #00ff88; --bg: #030706; --accent: #00d4ff; }
-        body { background-color: var(--bg); color: white; font-family: 'Cairo', sans-serif; margin: 0; }
-        .glass { background: rgba(10, 20, 15, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(0, 255, 136, 0.1); }
-        .nav-bottom { background: rgba(3, 7, 6, 0.95); position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid rgba(0, 255, 136, 0.1); z-index: 5000; }
+        :root { --primary: #00ff88; --bg: #030706; }
+        body { background-color: var(--bg); color: white; font-family: 'Cairo', sans-serif; margin: 0; overflow-x: hidden; }
+        .glass { background: rgba(10, 20, 15, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(0, 255, 136, 0.1); }
+        .nav-bottom { background: rgba(3, 7, 6, 0.98); position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid rgba(0, 255, 136, 0.2); z-index: 5000; }
         .nav-item { color: #4b6b5d; font-size: 11px; text-align: center; cursor: pointer; flex: 1; transition: 0.3s; }
-        .nav-item.active { color: var(--primary); text-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
-        .page { display: none; padding-bottom: 120px; animation: slideIn 0.5s ease-out; }
+        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
+        .page { display: none; padding-bottom: 120px; animation: slideUp 0.4s ease-out; }
         .page.active { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .hero-gradient { background: linear-gradient(180deg, rgba(0,255,136,0.1) 0%, rgba(3,7,6,1) 100%); }
-        .btn-premium { background: linear-gradient(90deg, #00ff88, #00d4ff); color: #000; font-weight: 900; border-radius: 20px; padding: 18px; transition: 0.4s; text-transform: uppercase; }
-        .tier-card { background: linear-gradient(145deg, #0a140f, #050a08); border: 1px solid rgba(255,255,255,0.03); border-left: 5px solid var(--primary); position: relative; overflow: hidden; }
-        .tier-card::before { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100%; background: linear-gradient(90deg, transparent, rgba(0,255,136,0.05)); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-premium { background: linear-gradient(90deg, #00ff88, #00d4ff); color: #000; font-weight: 900; border-radius: 18px; padding: 16px; transition: 0.3s; }
+        .tier-card { position: relative; overflow: hidden; border-radius: 30px; background: #0a140f; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; }
+        .tier-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .tier-img { width: 100%; h: 120px; object-fit: cover; opacity: 0.6; }
         input { background: rgba(255,255,255,0.03) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
@@ -28,128 +27,116 @@
 <body>
 
     <div id="auth-screen" class="page active flex flex-col min-h-screen">
-        <div class="h-[45vh] relative overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover opacity-60" alt="Future Wealth">
-            <div class="absolute inset-0 hero-gradient flex flex-col items-center justify-end pb-10">
-                <div class="w-24 h-24 mb-4 bg-white/10 backdrop-blur-xl rounded-[2.5rem] flex items-center justify-center border border-white/20 shadow-2xl">
-                    <i class="fas fa-chart-line text-4xl text-green-400"></i>
-                </div>
-                <h1 class="text-4xl font-black italic tracking-tighter">KFC <span class="text-green-500">GLOBAL</span></h1>
-                <p class="text-xs text-green-400/80 font-bold uppercase tracking-[4px]">Elite AI Trading</p>
+        <div class="h-[40vh] relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#030706] to-transparent flex flex-col items-center justify-end pb-6">
+                <h1 class="text-4xl font-black italic">KFC <span class="text-green-500">GLOBAL</span></h1>
             </div>
         </div>
-
-        <div class="px-8 -mt-6 relative z-10">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-black mb-2">ثروتك الرقمية تبدأ هنا</h2>
-                <p class="text-xs text-gray-400 leading-relaxed">استخدم قوة الذكاء الاصطناعي لتوليد أرباح تلقائية على مدار الساعة. انضم إلى أكثر من 50,000 مستثمر ناجح اليوم.</p>
-            </div>
-
-            <div class="space-y-4 max-w-sm mx-auto">
-                <div class="relative">
-                    <i class="fas fa-id-card absolute right-4 top-4 text-green-500"></i>
-                    <input id="reg-name" type="text" placeholder="الاسم الثلاثي المعتمد" class="w-full pr-12 pl-4 py-4 rounded-2xl outline-none focus:border-green-500 transition-all">
-                </div>
-                <div class="relative">
-                    <i class="fas fa-envelope absolute right-4 top-4 text-green-500"></i>
-                    <input id="reg-email" type="email" placeholder="البريد الإلكتروني الحقيقي" class="w-full pr-12 pl-4 py-4 rounded-2xl outline-none focus:border-green-500 transition-all">
-                </div>
-                <div class="relative">
-                    <i class="fas fa-phone absolute right-4 top-4 text-green-500"></i>
-                    <input id="reg-phone" type="tel" placeholder="رقم الهاتف النشط" class="w-full pr-12 pl-4 py-4 rounded-2xl outline-none focus:border-green-500 transition-all">
-                </div>
-                
-                <div class="flex items-center gap-2 p-3 bg-white/5 rounded-xl border border-white/5">
-                    <i class="fas fa-info-circle text-blue-400 text-xs"></i>
-                    <p class="text-[9px] text-gray-400">تأكد من البيانات؛ تستخدم للتأكد من ملكية الأرباح عند السحب.</p>
-                </div>
-
-                <button onclick="handleLogin()" class="w-full btn-premium shadow-[0_10px_40px_rgba(0,255,136,0.3)] hover:scale-[1.02] active:scale-95">
-                    ابدأ رحلة المليون الآن <i class="fas fa-arrow-left mr-2"></i>
-                </button>
-            </div>
+        <div class="px-8 space-y-4 max-w-sm mx-auto w-full">
+            <input id="reg-name" type="text" placeholder="الاسم الثلاثي الكامل" class="w-full p-4 rounded-2xl outline-none">
+            <input id="reg-email" type="email" placeholder="البريد الإلكتروني" class="w-full p-4 rounded-2xl outline-none">
+            <input id="reg-phone" type="tel" placeholder="رقم الهاتف" class="w-full p-4 rounded-2xl outline-none">
+            <button onclick="handleLogin()" class="w-full btn-premium shadow-2xl">فتح الحساب الاستثماري</button>
         </div>
     </div>
 
     <div id="main-app" style="display:none">
         
         <div id="page-home" class="page active px-5 pt-8">
-            <div class="flex justify-between items-center mb-8 bg-white/5 p-4 rounded-[25px] border border-white/5">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-black font-black">AI</div>
-                    <div>
-                        <p id="display-name" class="text-sm font-black text-white"></p>
-                        <p class="text-[9px] text-green-400 font-bold uppercase tracking-widest"><i class="fas fa-check-circle"></i> حساب موثق</p>
-                    </div>
+            <div class="flex items-center gap-3 mb-8 bg-white/5 p-4 rounded-3xl border border-white/5">
+                <img src="https://cdn-icons-png.flaticon.com/512/6141/6141473.png" class="w-10 h-10">
+                <div>
+                    <p class="text-[10px] text-green-500 font-bold uppercase">المستثمر الموثق</p>
+                    <h2 id="display-name" class="text-sm font-black"></h2>
                 </div>
-                <div class="text-gray-500"><i class="fas fa-bell animate-bounce"></i></div>
             </div>
 
             <div class="relative rounded-[40px] p-8 mb-10 overflow-hidden shadow-2xl border border-white/5">
-                <img src="https://images.unsplash.com/photo-1611974714024-4627d2bc6a2a?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-20" alt="Chart">
-                <div class="relative z-10">
-                    <p class="text-[10px] text-gray-400 font-bold uppercase mb-2">إجمالي الأرباح المولدة</p>
-                    <h3 class="text-6xl font-black italic tracking-tighter text-white mb-8">$<span id="balance">0.00</span></h3>
-                    <div class="flex gap-4">
-                        <button onclick="switchPage('recharge')" class="flex-1 bg-green-500 text-black p-4 rounded-2xl font-black text-xs shadow-lg">إيداع جديد</button>
-                        <button onclick="handleWithdrawRequest()" class="flex-1 bg-white/10 backdrop-blur-xl p-4 rounded-2xl font-black text-xs border border-white/10">سحب الربح</button>
-                    </div>
+                <img src="https://images.unsplash.com/photo-1611974714024-4627d2bc6a2a?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-10">
+                <div class="relative z-10 text-center">
+                    <p class="text-[10px] text-gray-400 font-bold uppercase mb-2">الرصيد القابل للسحب</p>
+                    <h3 class="text-6xl font-black italic text-white">$<span id="balance">0.00</span></h3>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between mb-6 px-2">
-                <h4 class="font-black text-xl italic">محافظ النمو الذكية</h4>
-                <span class="text-[9px] bg-white/5 px-3 py-1 rounded-full text-green-400 border border-green-500/20">LIVE MARKET</span>
+            <h4 class="font-black text-xl mb-6">خطط الاستثمار المتميزة</h4>
+            <div id="plans-container" class="space-y-6">
+                </div>
+        </div>
+
+        <div id="page-user" class="page px-6 pt-10">
+            <div class="glass p-8 rounded-[40px] text-center border border-green-500/20">
+                <div class="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/30">
+                    <i class="fas fa-user-shield text-4xl text-green-500"></i>
+                </div>
+                <h2 class="text-2xl font-black mb-6">ملف المستثمر</h2>
+                
+                <div class="space-y-4 text-right mb-10">
+                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center">
+                        <span class="text-gray-500 text-xs">الاسم:</span>
+                        <span id="p-name" class="font-bold"></span>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center">
+                        <span class="text-gray-500 text-xs">الهاتف:</span>
+                        <span id="p-phone" class="font-bold"></span>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center">
+                        <span class="text-gray-500 text-xs">الحالة:</span>
+                        <span class="text-green-500 font-bold">نشط <i class="fas fa-check-circle"></i></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="switchPage('recharge')" class="bg-green-500 text-black p-4 rounded-2xl font-black text-xs">إيداع جديد</button>
+                    <button onclick="handleWithdrawRequest()" class="bg-red-500/20 text-red-500 p-4 rounded-2xl font-black text-xs border border-red-500/20">سحب الأرباح</button>
+                </div>
+                <button onclick="localStorage.clear(); location.reload();" class="w-full mt-6 text-[10px] text-gray-600 font-bold uppercase">تسجيل الخروج</button>
             </div>
-            
-            <div id="plans-container" class="space-y-4"></div>
         </div>
 
         <div id="page-recharge" class="page px-6 pt-10 text-center">
-            <div class="glass p-8 rounded-[45px] border-2 border-green-500/10">
-                <img src="https://images.unsplash.com/photo-1621416848446-991125c75b06?auto=format&fit=crop&q=80&w=400" class="w-full h-32 object-cover rounded-3xl mb-8 opacity-50" alt="Crypto">
-                <h2 class="text-xl font-black mb-8 italic">إيداع الأصول الرقمية (USDT)</h2>
-                <div class="bg-white p-4 w-44 h-44 mx-auto rounded-[35px] mb-8 shadow-[0_0_50px_rgba(255,255,255,0.1)]">
+            <div class="glass p-8 rounded-[45px]">
+                <h2 class="text-xl font-black mb-8 italic">مركز الشحن الآمن</h2>
+                <div class="bg-white p-4 w-44 h-44 mx-auto rounded-[35px] mb-8 shadow-2xl">
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-full">
                 </div>
-                <p class="text-[10px] text-gray-500 mb-2 uppercase tracking-widest">Address TRC20</p>
                 <div class="bg-black/60 p-5 rounded-2xl border border-white/5 font-mono text-[10px] mb-8 break-all select-all">TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2</div>
-                <button onclick="navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2');alert('تم نسخ المحفظة!')" class="w-full btn-premium">نسخ العنوان ومتابعة الشحن</button>
+                <button onclick="navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2');alert('تم نسخ العنوان!')" class="w-full btn-premium shadow-xl">نسخ عنوان TRC20</button>
             </div>
         </div>
 
         <nav class="nav-bottom">
-            <div class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-home-alt text-xl block mb-1"></i>الرئيسية</div>
-            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-coins text-xl block mb-1"></i>شحن</div>
-            <div class="nav-item" onclick="switchPage('profile', this)"><i class="fas fa-user-gear text-xl block mb-1"></i>الإعدادات</div>
+            <div class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-grid-2 text-xl block mb-1"></i>الخطط</div>
+            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-plus-circle text-xl block mb-1"></i>إيداع</div>
+            <div class="nav-item" onclick="switchPage('user', this)"><i class="fas fa-user-circle text-xl block mb-1"></i>حسابي</div>
         </nav>
     </div>
 
     <div id="tier-modal" class="fixed inset-0 bg-black/95 z-[9999] hidden items-center justify-center p-6">
-        <div class="glass p-8 rounded-[45px] w-full max-w-sm text-center relative border-t-8 border-green-500 overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl"></div>
-            <div id="m-icon-box" class="w-20 h-20 bg-green-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-6"><i id="m-icon" class="text-4xl text-green-500"></i></div>
-            <h3 id="m-title" class="text-2xl font-black mb-1 uppercase tracking-tighter"></h3>
-            <div id="m-monthly" class="text-green-400 font-black mb-8 text-xl"></div>
-            <div id="m-perks" class="text-right text-xs space-y-4 mb-10 text-gray-300"></div>
-            <button onclick="goToDeposit()" class="w-full btn-premium">تأكيد الاشتراك المباشر</button>
-            <button onclick="document.getElementById('tier-modal').style.display='none'" class="mt-6 text-gray-600 text-[10px] font-black uppercase tracking-widest">إغلاق</button>
+        <div class="glass p-8 rounded-[45px] w-full max-w-sm text-center relative border-t-8 border-green-500">
+            <div id="m-icon-box" class="w-16 h-16 bg-green-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6"><i id="m-icon" class="text-3xl text-green-500"></i></div>
+            <h3 id="m-title" class="text-2xl font-black mb-2 uppercase tracking-tighter text-white"></h3>
+            <div id="m-monthly" class="text-green-400 font-black mb-8 text-lg bg-white/5 py-2 rounded-full"></div>
+            <div id="m-perks" class="text-right text-xs space-y-4 mb-10 text-gray-400"></div>
+            <button onclick="goToDeposit()" class="w-full btn-premium">تأكيد الاشتراك الآن</button>
+            <button onclick="document.getElementById('tier-modal').style.display='none'" class="mt-4 text-gray-600 text-[10px] font-black uppercase">إلغاء</button>
         </div>
     </div>
 
     <script>
         const tiers = [
-            { id: 1, cost: 100, daily: 15, monthly: 450, name: "Platinum Layer", icon: "fas fa-shield-alt", perks: ["عائد يومي $15", "تأمين أصول المستوى الأول", "سحب أرباح أسبوعي", "دعم فني مخصص"] },
-            { id: 2, cost: 300, daily: 55, monthly: 1650, name: "Diamond Layer", icon: "fas fa-gem", perks: ["عائد يومي $55", "تأمين أصول المستوى الثاني", "سحب أرباح مرتين أسبوعياً", "مدير حساب AI شخصي"] },
-            { id: 3, cost: 600, daily: 130, monthly: 3900, name: "Emerald Tier", icon: "fas fa-crown", perks: ["عائد يومي $130", "تأمين رأس المال بالكامل", "سحب أرباح فوري يومي", "وصول حصري للصفقات الكبرى"] }
+            { id: 1, cost: 100, daily: 15, monthly: 450, name: "Platinum Pro", img: "https://images.unsplash.com/photo-1518186239751-f7213a1de00c?auto=format&fit=crop&q=80&w=400", icon: "fas fa-shield-halved", perks: ["عائد يومي $15", "تأمين رأس المال 100%", "دعم فني مخصص"] },
+            { id: 2, cost: 300, daily: 55, monthly: 1650, name: "Diamond Elite", img: "https://images.unsplash.com/photo-1551288049-bbbda536ad37?auto=format&fit=crop&q=80&w=400", icon: "fas fa-gem", perks: ["عائد يومي $55", "خوارزمية تداول VIP", "سحب مرتين أسبوعياً"] },
+            { id: 3, cost: 600, daily: 130, monthly: 3900, name: "Emerald Global", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400", icon: "fas fa-crown", perks: ["عائد يومي $130", "تأمين شامل للأرباح", "سحب فوري يومي"] }
         ];
 
         function handleLogin() {
             const name = document.getElementById('reg-name').value;
             const email = document.getElementById('reg-email').value;
-            if (name.trim().split(" ").length < 3) return alert("يرجى إدخال اسمك الثلاثي لضمان توثيق الحساب.");
-            if (!email.includes("@")) return alert("يرجى إدخال بريد إلكتروني صالح.");
-            const user = { name, email, balance: 0 };
+            const phone = document.getElementById('reg-phone').value;
+            if (name.length < 5 || !email.includes("@")) return alert("يرجى إدخال بيانات صحيحة.");
+            const user = { name, email, phone, balance: 0 };
             localStorage.setItem('kfc_user', JSON.stringify(user));
             startApp(user);
         }
@@ -159,19 +146,27 @@
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('display-name').innerText = u.name;
             document.getElementById('balance').innerText = u.balance.toFixed(2);
+            document.getElementById('p-name').innerText = u.name;
+            document.getElementById('p-phone').innerText = u.phone;
             renderPlans();
         }
 
         function renderPlans() {
             document.getElementById('plans-container').innerHTML = tiers.map(t => `
-                <div class="tier-card p-6 rounded-[30px] flex justify-between items-center shadow-lg" onclick="openModal(${t.id})">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-black flex items-center justify-center border border-white/5 shadow-inner"><i class="${t.icon} text-green-500"></i></div>
-                        <div><p class="font-black text-sm uppercase text-white tracking-tighter">${t.name}</p><p class="text-green-400 text-[10px] font-bold">عائد يومي: $${t.daily}</p></div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-white font-black italic">$${t.cost}</p>
-                        <i class="fas fa-plus-circle text-gray-800 text-xs mt-1"></i>
+                <div class="tier-card shadow-xl" onclick="openModal(${t.id})">
+                    <img src="${t.img}" class="tier-img">
+                    <div class="p-6 flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center border border-green-500/20"><i class="${t.icon} text-green-500 text-xl"></i></div>
+                            <div>
+                                <p class="font-black text-sm uppercase text-white">${t.name}</p>
+                                <p class="text-green-400 text-[10px] font-bold">اربح $${t.daily} يومياً</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[8px] text-gray-500 uppercase">الاشتراك</p>
+                            <p class="font-black text-white text-lg">$${t.cost}</p>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -181,19 +176,22 @@
             const t = tiers.find(x => x.id === id);
             document.getElementById('m-title').innerText = t.name;
             document.getElementById('m-icon').className = t.icon;
-            document.getElementById('m-monthly').innerText = "$" + t.monthly + " / شهرياً";
+            document.getElementById('m-monthly').innerText = "عائد شهري: $" + t.monthly;
             document.getElementById('m-perks').innerHTML = t.perks.map(p => `<div><i class="fas fa-check-circle ml-2 text-green-500"></i> ${p}</div>`).join('');
             document.getElementById('tier-modal').style.display = 'flex';
         }
 
         function goToDeposit() { document.getElementById('tier-modal').style.display='none'; switchPage('recharge'); }
+        function handleWithdrawRequest() { alert("تم استلام طلب السحب. سيتم مراجعة محفظتك المسجلة وتحويل المبلغ خلال 24 ساعة."); }
+
         function switchPage(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + pId).classList.add('active');
-            if(el) { document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            }
         }
-
-        function handleWithdrawRequest() { alert("تم استلام طلب السحب. نظراً لسياسة الأمان، يتم معالجة الطلبات خلال 24 ساعة."); }
 
         window.onload = () => { const saved = localStorage.getItem('kfc_user'); if(saved) startApp(JSON.parse(saved)); };
     </script>
