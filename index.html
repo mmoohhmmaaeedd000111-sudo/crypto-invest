@@ -9,19 +9,21 @@
 </head>
 <body class="bg-black text-white flex items-center justify-center min-h-screen p-4">
     <div id="auth" class="p-8 border border-yellow-600 rounded-3xl w-full max-w-sm text-center shadow-2xl">
-        <h1 class="text-3xl font-black text-yellow-500 mb-6 uppercase tracking-tighter">بوابة المستثمرين</h1>
-        <input id="e" type="email" placeholder="البريد الإلكتروني" class="w-full p-4 mb-4 bg-zinc-900 border border-zinc-700 rounded-xl focus:border-yellow-500 outline-none">
-        <input id="p" type="tel" placeholder="رقم الهاتف" class="w-full p-4 mb-6 bg-zinc-900 border border-zinc-700 rounded-xl focus:border-yellow-500 outline-none">
+        <h1 class="text-3xl font-black text-yellow-500 mb-6 tracking-tighter">بوابة المستثمرين</h1>
+        <input id="e" type="email" placeholder="البريد الإلكتروني" class="w-full p-4 mb-4 bg-zinc-900 border border-zinc-700 rounded-xl outline-none focus:border-yellow-500">
+        <input id="p" type="tel" placeholder="رقم الهاتف" class="w-full p-4 mb-6 bg-zinc-900 border border-zinc-700 rounded-xl outline-none focus:border-yellow-500">
         <button onclick="go()" class="w-full bg-yellow-600 p-4 rounded-xl font-bold text-black hover:bg-yellow-500 transition">دخول فوري</button>
     </div>
-    <div id="pro" style="display:none" class="text-center p-8 w-full max-w-md">
+
+    <div id="pro" style="display:none" class="text-center p-8 w-full max-w-md animate-pulse">
         <h2 class="text-xl text-gray-400">رصيدك الحالي</h2>
         <p class="text-6xl font-black text-green-500 my-6 tracking-tight"><span id="b">0.00</span> $</p>
         <div class="p-6 bg-zinc-900 border border-zinc-800 rounded-2xl">
-            <p class="text-yellow-500 font-bold mb-2">إيداع USDT (TRC20)</p>
-            <p class="text-[10px] text-gray-500 italic text-center">ارسل المبلغ للمحفظة ثم زود الإدارة بصورة العملية لتفعيل حسابك</p>
+            <p class="text-yellow-500 font-bold mb-2 font-mono">USDT (TRC20)</p>
+            <p class="text-[10px] text-gray-500 italic">ارسل المبلغ للمحفظة ثم زود الإدارة بصورة العملية لتفعيل حسابك</p>
         </div>
     </div>
+
     <script>
         const S_URL = 'https://jcrdagztrraffegnzyzs.supabase.co';
         const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjcmRhZ3p0cnJhZmZlZ256eXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDE0MzEsImV4cCI6MjA4MjQxNzQzMX0.EiJ50ubReAYkfiOJgOth6NtBsuyUNwag80rJMsqgc4A';
@@ -30,37 +32,31 @@
         async function go() {
             const e = document.getElementById('e').value;
             const p = document.getElementById('p').value;
-            if(!e || !p) return alert("يرجى إكمال البيانات");
+            if(!e || !p) return alert("أكمل البيانات");
 
-            // تم استبدال upsert بـ insert لحل مشكلة الخطأ التي ظهرت لك
-            const { data, error } = await _s
+            // محاولة جلب بيانات المستخدم أولاً
+            let { data: user, error: fetchError } = await _s
                 .from('users')
-                .insert([{ email: e, phone: p, balance: 0 }])
-                .select()
+                .select('*')
+                .eq('email', e)
                 .single();
 
-            if(error) {
-                // إذا كان المستخدم موجوداً مسبقاً، سنقوم بجلبه فقط
-                const { data: existingUser, error: fetchError } = await _s
+            if (!user) {
+                // إذا لم يوجد، نقوم بإنشائه
+                const { data: newUser, error: insError } = await _s
                     .from('users')
-                    .select('*')
-                    .eq('email', e)
+                    .insert([{ email: e, phone: p, balance: 0 }])
+                    .select()
                     .single();
                 
-                if(existingUser) {
-                    showDashboard(existingUser);
-                } else {
-                    alert("حدث خطأ: " + error.message);
-                }
-            } else {
-                showDashboard(data);
+                if (insError) return alert("خطأ في القاعدة: " + insError.message);
+                user = newUser;
             }
-        }
 
-        function showDashboard(user) {
+            // عرض لوحة التحكم
             document.getElementById('auth').style.display = 'none';
             document.getElementById('pro').style.display = 'block';
-            document.getElementById('b').innerText = user.balance.toFixed(2);
+            document.getElementById('b').innerText = parseFloat(user.balance).toFixed(2);
         }
     </script>
 </body>
