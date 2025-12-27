@@ -3,64 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOLDEN CRYPTO | استثمار النخبة</title>
+    <title>SHΔDØW INVEST | منصة الاستثمار العالمية</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: #050505; color: white; font-family: sans-serif; }
-        .gold-border { border: 1px solid #d4af37; }
-        .gold-bg { background: linear-gradient(45deg, #d4af37, #f9d976); color: black; }
+        body { background-color: #080808; color: #f0f0f0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .gold-text { background: linear-gradient(90deg, #ffd700, #b8860b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-gold { background: linear-gradient(45deg, #ffd700, #b8860b); color: #000; font-weight: bold; }
+        .input-dark { background: #000; border: 1px solid #222; color: white; transition: 0.3s; }
+        .input-dark:focus { border-color: #ffd700; outline: none; }
     </style>
 </head>
-<body class="p-4">
+<body class="p-4 md:p-10">
 
-    <div class="text-center py-10">
-        <h1 class="text-4xl font-bold text-yellow-500 mb-2">GOLDEN CRYPTO 🔥</h1>
-        <p class="text-gray-400">نظام استثمار USDT الأكثر أماناً في 2024</p>
-    </div>
+    <header class="text-center mb-10">
+        <h1 class="text-4xl font-black gold-text mb-2 tracking-tighter">SHΔDØW CORE INVEST</h1>
+        <p class="text-gray-400 text-sm">استثمار رقمي ذكي • آمن • فوري</p>
+    </header>
 
-    <div class="bg-zinc-900 p-6 rounded-2xl gold-border mb-8 shadow-2xl">
-        <h2 class="mb-4 text-xl font-semibold">تسجيل الدخول / اشتراك</h2>
-        <input type="email" placeholder="الجيميل" class="w-full mb-3 p-3 rounded bg-black border border-gray-700">
-        <input type="tel" placeholder="رقم الهاتف" class="w-full mb-3 p-3 rounded bg-black border border-gray-700">
-        <input type="password" placeholder="كلمة المرور" class="w-full mb-4 p-3 rounded bg-black border border-gray-700">
-        <button class="w-full gold-bg font-bold py-3 rounded-xl">دخول إلى المحفظة</button>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4 mb-8">
-        <div class="bg-zinc-900 p-4 rounded-xl border border-gray-800 text-center">
-            <p class="text-gray-400 text-sm">رصيدك الحالي</p>
-            <p class="text-2xl font-bold text-green-500">0.00$</p>
+    <div id="auth-section" class="max-w-md mx-auto glass p-8 rounded-3xl shadow-2xl mb-10 border-t-2 border-yellow-600">
+        <h2 class="text-2xl font-bold mb-6 text-center italic">بوابة المستثمرين</h2>
+        <div class="space-y-4">
+            <input id="email" type="email" placeholder="البريد الإلكتروني (Gmail)" class="w-full p-4 input-dark rounded-xl">
+            <input id="phone" type="tel" placeholder="رقم الهاتف" class="w-full p-4 input-dark rounded-xl">
+            <button onclick="login()" class="w-full btn-gold py-4 rounded-xl hover:brightness-110 active:scale-95 transition">دخول إلى المحفظة</button>
         </div>
-        <div class="bg-zinc-900 p-4 rounded-xl border border-gray-800 text-center">
-            <p class="text-gray-400 text-sm">أرباح اليوم</p>
-            <p class="text-2xl font-bold text-yellow-500">+0.00$</p>
-        </div>
+        <p class="text-[10px] text-gray-600 mt-4 text-center italic text-right">بالدخول للمنصة، أنت توافق على شروط الاستثمار الرقمي.</p>
     </div>
 
-    <h2 class="text-xl font-bold mb-4">خطط الاستثمار المتاحة</h2>
-    <div class="space-y-4">
-        <div class="bg-zinc-900 p-5 rounded-2xl border-l-4 border-yellow-500 flex justify-between items-center">
-            <div>
-                <h3 class="font-bold">خطة البرونز</h3>
-                <p class="text-sm text-gray-400">ربح 5% يومياً لمدة شهر</p>
+    <div id="dashboard" class="hidden max-w-4xl mx-auto animate-in fade-in duration-700">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="glass p-8 rounded-2xl border-b-4 border-yellow-500 text-center">
+                <p class="text-gray-400 text-sm uppercase tracking-widest">رصيدك المتاح</p>
+                <h3 class="text-4xl font-black text-green-500 mt-2"><span id="user-balance">0.00</span> <span class="text-lg">USDT</span></h3>
             </div>
-            <button class="gold-bg px-4 py-2 rounded-lg text-sm font-bold italic">اشترك بـ 50$</button>
-        </div>
-        
-        <div class="bg-zinc-900 p-5 rounded-2xl border-l-4 border-yellow-500 flex justify-between items-center">
-            <div>
-                <h3 class="font-bold">خطة الملوك</h3>
-                <p class="text-sm text-gray-400">ربح 15% يومياً لمدة شهر</p>
+            <div class="glass p-8 rounded-2xl border-b-4 border-yellow-500 text-center">
+                <p class="text-gray-400 text-sm uppercase tracking-widest">الأرباح التراكمية</p>
+                <h3 class="text-4xl font-black text-yellow-500 mt-2">+0.00 <span class="text-lg">USDT</span></h3>
             </div>
-            <button class="gold-bg px-4 py-2 rounded-lg text-sm font-bold italic">اشترك بـ 500$</button>
+        </div>
+
+        <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <i class="fas fa-chart-line text-yellow-500"></i> خطط الاستثمار
+        </h2>
+        <div class="space-y-4 mb-10 text-right">
+            <div class="glass p-5 rounded-2xl flex justify-between items-center border border-gray-800 hover:border-yellow-700 transition">
+                <div>
+                    <h3 class="font-bold text-lg">خطة البركان</h3>
+                    <p class="text-xs text-gray-500">عائد 15% شهرياً • سحب أسبوعي</p>
+                </div>
+                <button class="btn-gold px-6 py-2 rounded-lg text-xs">اشتراك</button>
+            </div>
+            <div class="glass p-5 rounded-2xl flex justify-between items-center border border-gray-800 hover:border-yellow-700 transition opacity-70">
+                <div>
+                    <h3 class="font-bold text-lg">خطة النخبة</h3>
+                    <p class="text-xs text-gray-500">عائد 40% شهرياً • حصري للمبالغ الكبيرة</p>
+                </div>
+                <button class="bg-gray-800 text-gray-400 px-6 py-2 rounded-lg text-xs" disabled>مغلق</button>
+            </div>
+        </div>
+
+        <div class="p-6 bg-yellow-900/10 border border-yellow-900/30 rounded-2xl text-center">
+            <p class="text-yellow-500 text-sm font-bold">إيداع USDT (TRC20)</p>
+            <p class="text-xs text-gray-400 mt-1 italic">لشحن الرصيد وتفعيل الخطط، تواصل مع الإدارة مباشرة</p>
         </div>
     </div>
 
-    <div class="mt-10 p-6 bg-yellow-500/10 rounded-2xl text-center">
-        <p class="text-yellow-500 mb-2 font-bold">لشحن الرصيد يدوياً (USDT TRC20)</p>
-        <p class="text-xs break-all text-gray-300">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p>
-        <p class="mt-2 text-sm">أرسل صورة التحويل للدعم الفني لتفعيل الخطة</p>
+    <div class="fixed bottom-4 right-4 glass p-3 rounded-xl text-[10px] text-green-400 border border-green-900/50">
+        <i class="fas fa-circle animate-pulse"></i> المداولات الآن: <span id="live-text">جاري الاتصال..</span>
     </div>
 
-</body>
-</html>
+    <script>
+        const SUPABASE_URL = 'https://jcrdagztrraffegnzyzs.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjcmRhZ3p0cnJhZmZlZ256eXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDE0MzEsImV4cCI6MjA4MjQxNzQzMX0.EiJ50ubReAYkfiOJgOth6NtBsuyUNwag80rJMsqgc4A'; 
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            if(!email || !phone) return alert("يرجى إدخال البيانات المطلوبة");
+
+            // محاولة جلب المستخدم
+            let { data: user, error } = await _supabase
+                .from('users')
+                .select('*')
+                .eq('email', email)
+                .single();
+
+            if (!user) {
+                // إنشاء مستخدم جديد إذا لم يوجد
+                const { data: newUser, error: insErr } = await _supabase
+                    .from('users')
+                    .insert([{ email, phone, balance: 0 }])
+                    .select().single();
+                
+                if(insErr) {
+                    console.error(insErr);
+                    return alert("خطأ في الاتصال بقاعدة البيانات. تأكد من تفعيل RLS في Supabase.");
+                }
+                user = newUser;
+            }
+
+            // تحديث الواجهة
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('user-balance').innerText = user.balance.toFixed(2);
+        }
+
+        // تحديث العداد الم
