@@ -3,97 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KFC INVEST - PREMIUM</title>
+    <title>KFC GLOBAL INVEST</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #2ecc71; --dark-bg: #0d1a14; --card-bg: #15261d; --accent: #f1c40f; }
-        body { background-color: var(--dark-bg); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .glass-card { background: var(--card-bg); border: 1px solid #1e3a2b; border-radius: 24px; }
-        .grid-icon { background: rgba(46, 204, 113, 0.1); border-radius: 15px; transition: 0.3s; }
-        .grid-icon:active { transform: scale(0.9); background: rgba(46, 204, 113, 0.2); }
-        .nav-bottom { background: #0a1610; border-top: 1px solid #1e3a2b; position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 12px 0; z-index: 1000; }
-        .nav-item { color: #557a66; font-size: 10px; text-align: center; }
-        .nav-item.active { color: var(--primary); font-weight: bold; }
-        .page { display: none; padding-bottom: 100px; animation: slideUp 0.3s ease-out; }
+        :root { --primary: #00ff88; --bg: #050a08; --card: #0d1a15; }
+        body { background-color: var(--bg); color: white; font-family: 'Cairo', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #0d1a15 0%, #050a08 100%); border: 1px solid #1a3329; }
+        .glass { background: rgba(13, 26, 21, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0, 255, 136, 0.1); }
+        .nav-bottom { background: rgba(5, 10, 8, 0.95); backdrop-filter: blur(15px); border-top: 1px solid #1a3329; position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 15px 0; z-index: 1000; }
+        .nav-item { color: #4b6b5d; font-size: 11px; transition: 0.3s; cursor: pointer; text-align: center; }
+        .nav-item.active { color: var(--primary); transform: translateY(-5px); }
+        .page { display: none; min-height: 100vh; padding-bottom: 120px; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .vip-badge { background: linear-gradient(to right, #f1c40f, #d4ac0d); color: black; font-weight: 900; padding: 2px 10px; border-radius: 8px; font-size: 10px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .btn-main { background: linear-gradient(45deg, #00ff88, #00bd65); color: #050a08; font-weight: 800; border-radius: 16px; transition: 0.3s; }
+        .btn-main:active { transform: scale(0.95); }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="auth-screen" class="min-h-screen flex flex-col items-center justify-center p-8 page active">
-        <div class="mb-10 text-center">
-            <div class="w-24 h-24 bg-green-600 rounded-3xl flex items-center justify-center mx-auto shadow-2xl rotate-12">
-                <i class="fas fa-chart-pie text-5xl text-white -rotate-12"></i>
-            </div>
-            <h1 class="text-3xl font-black mt-6 tracking-tighter text-green-500">KFC INVEST</h1>
-            <p class="text-gray-500 text-sm mt-2">مستقبلك المالي يبدأ هنا</p>
+    <div id="loader" class="fixed inset-0 z-[2000] bg-black flex items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+    </div>
+
+    <div id="auth-screen" class="page active p-8 flex flex-col justify-center">
+        <div class="text-center mb-12">
+            <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=200&h=200&fit=crop" class="w-24 h-24 mx-auto rounded-3xl mb-6 shadow-[0_0_30px_rgba(0,255,136,0.3)]">
+            <h1 class="text-4xl font-black text-white tracking-tighter">KFC INVEST</h1>
+            <p class="text-green-500 font-bold">المستقبل الرقمي للاستثمار</p>
         </div>
-        <div class="w-full max-w-sm space-y-4">
-            <input id="email" type="email" placeholder="البريد الإلكتروني" class="w-full p-4 bg-white/5 border border-green-900 rounded-2xl outline-none focus:border-green-500 transition-all">
-            <input id="phone" type="tel" placeholder="رقم الهاتف" class="w-full p-4 bg-white/5 border border-green-900 rounded-2xl outline-none focus:border-green-500 transition-all">
-            <button onclick="handleAuth('login')" class="w-full bg-green-600 p-4 rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition">دخول فوري</button>
-            <button onclick="handleAuth('register')" class="w-full border border-green-900 p-4 rounded-2xl font-bold text-gray-400">إنشاء حساب جديد</button>
+        <div class="space-y-4">
+            <input id="email" type="email" placeholder="البريد الإلكتروني" class="w-full p-5 bg-[#0d1a15] border border-green-900/30 rounded-2xl outline-none focus:border-green-400">
+            <input id="phone" type="tel" placeholder="رقم الهاتف" class="w-full p-5 bg-[#0d1a15] border border-green-900/30 rounded-2xl outline-none focus:border-green-400">
+            <button onclick="handleAuth('login')" class="w-full btn-main p-5 text-lg shadow-lg">دخول آمن</button>
+            <button onclick="handleAuth('register')" class="w-full text-gray-500 font-bold text-sm">ليس لديك حساب؟ سجل الآن</button>
         </div>
     </div>
 
     <div id="main-app" style="display:none">
         
-        <div id="page-home" class="page active px-4 pt-6">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 bg-green-900 rounded-full border border-green-500 flex items-center justify-center font-bold">U</div>
-                    <div>
-                        <p class="text-xs text-gray-500">مرحباً بك</p>
-                        <p id="display-phone" class="font-bold text-sm">User</p>
-                    </div>
+        <div id="page-home" class="page active px-5 pt-8">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-2xl font-black">لوحة التحكم</h2>
+                    <p class="text-xs text-gray-500" id="user-p">جاري التحميل...</p>
                 </div>
-                <div class="vip-badge">VIP 0</div>
+                <div class="bg-green-500/20 p-2 rounded-xl border border-green-500/40">
+                    <i class="fas fa-bell text-green-500"></i>
+                </div>
             </div>
 
-            <div class="glass-card p-6 mb-8 relative overflow-hidden shadow-2xl">
-                <div class="absolute -right-10 -top-10 w-32 h-32 bg-green-500/10 rounded-full blur-3xl"></div>
-                <p class="text-xs text-green-400 font-bold mb-1">إجمالي الأصول ($)</p>
-                <h2 class="text-5xl font-black tracking-tight"><span id="balance">0.00</span></h2>
+            <div class="hero-gradient p-8 rounded-[32px] mb-8 relative overflow-hidden shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=200&fit=crop" class="absolute inset-0 opacity-10 object-cover w-full h-full">
+                <p class="text-xs text-green-400 font-bold mb-2 uppercase tracking-widest">إجمالي الرصيد القابل للسحب</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-4xl font-black">$</span>
+                    <span id="balance" class="text-6xl font-black tracking-tighter">0.00</span>
+                </div>
                 <div class="flex gap-3 mt-8">
-                    <button onclick="switchPage('recharge')" class="flex-1 bg-green-600 py-3 rounded-xl font-bold text-xs"><i class="fas fa-wallet mr-2"></i> إيداع</button>
-                    <button class="flex-1 bg-white/5 border border-white/10 py-3 rounded-xl font-bold text-xs"><i class="fas fa-arrow-down-9-1 mr-2"></i> سحب</button>
+                    <button onclick="switchPage('recharge')" class="flex-1 btn-main py-3 text-xs"><i class="fas fa-plus-circle mr-1"></i> إيداع</button>
+                    <button onclick="switchPage('withdraw')" class="flex-1 bg-white/5 border border-white/10 py-3 rounded-xl text-xs font-bold"><i class="fas fa-wallet mr-1"></i> سحب</button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-4 gap-4 mb-8">
-                <div class="text-center" onclick="switchPage('recharge')"><div class="grid-icon p-4 mb-2"><i class="fas fa-file-invoice text-green-500"></i></div><p class="text-[10px]">إيداع</p></div>
-                <div class="text-center"><div class="grid-icon p-4 mb-2"><i class="fas fa-video text-green-500"></i></div><p class="text-[10px]">فيديو</p></div>
-                <div class="text-center"><div class="grid-icon p-4 mb-2"><i class="fas fa-download text-green-500"></i></div><p class="text-[10px]">تطبيق</p></div>
-                <div class="text-center"><div class="grid-icon p-4 mb-2"><i class="fas fa-headset text-green-500"></i></div><p class="text-[10px]">دعم</p></div>
+            <div class="grid grid-cols-4 gap-4 mb-10">
+                <div class="text-center" onclick="switchPage('recharge')"><div class="glass p-4 rounded-2xl mb-2 text-green-400"><i class="fas fa-bolt text-xl"></i></div><span class="text-[10px]">إيداع</span></div>
+                <div class="text-center" onclick="switchPage('withdraw')"><div class="glass p-4 rounded-2xl mb-2 text-yellow-500"><i class="fas fa-hand-holding-usd text-xl"></i></div><span class="text-[10px]">سحب</span></div>
+                <div class="text-center" onclick="switchPage('team')"><div class="glass p-4 rounded-2xl mb-2 text-blue-400"><i class="fas fa-users text-xl"></i></div><span class="text-[10px]">فريق</span></div>
+                <div class="text-center" onclick="window.open('https://t.me/YOUR_SUPPORT')"><div class="glass p-4 rounded-2xl mb-2 text-red-400"><i class="fas fa-headset text-xl"></i></div><span class="text-[10px]">دعم</span></div>
             </div>
 
-            <h3 class="font-bold text-green-500 mb-4 px-2 italic">Mission Hall</h3>
+            <h3 class="font-bold text-lg mb-4 flex items-center gap-2"><i class="fas fa-gem text-yellow-500"></i> خطط VIP الحصرية</h3>
             <div id="plans-container" class="space-y-4"></div>
         </div>
 
-        <div id="page-recharge" class="page px-6 pt-6">
-            <h2 class="text-2xl font-black mb-6">شحن الرصيد</h2>
-            <div class="glass-card p-6 text-center">
-                <div class="bg-white p-3 w-40 h-40 mx-auto rounded-2xl mb-6">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-full">
+        <div id="page-recharge" class="page px-6 pt-10">
+            <h2 class="text-3xl font-black mb-8">شحن الرصيد</h2>
+            <div class="glass p-8 rounded-[32px] text-center border-2 border-green-500/20">
+                <div class="bg-white p-4 w-48 h-48 mx-auto rounded-3xl mb-8 shadow-2xl shadow-green-500/20">
+                    <img id="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-full">
                 </div>
-                <p class="text-[10px] text-gray-500 mb-2 font-mono">USDT (TRC20) Wallet</p>
-                <div class="bg-black/50 p-4 rounded-xl border border-green-900 break-all text-[11px] mb-6 select-all font-mono">
+                <p class="text-xs text-gray-500 mb-2">عنوان USDT (TRC20)</p>
+                <div class="bg-black/50 p-4 rounded-2xl border border-green-500/30 font-mono text-[11px] mb-8 break-all select-all">
                     TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2
                 </div>
-                <button onclick="navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2');alert('تم نسخ العنوان!')" class="w-full bg-green-600 py-4 rounded-2xl font-bold shadow-lg">نسخ العنوان <i class="fas fa-copy ml-2"></i></button>
+                <button onclick="copyAddr()" class="w-full btn-main py-5 shadow-xl">نسخ العنوان وفتح المحفظة</button>
+            </div>
+        </div>
+
+        <div id="page-withdraw" class="page px-6 pt-10 text-center">
+            <i class="fas fa-shield-alt text-6xl text-green-900 mb-6"></i>
+            <h2 class="text-2xl font-black mb-4">طلب سحب الأرباح</h2>
+            <p class="text-gray-500 text-sm mb-8">أدخل عنوان محفظتك TRC20 والمبلغ المراد سحبه</p>
+            <div class="space-y-4">
+                <input type="text" placeholder="عنوان محفظتك (TRC20)" class="w-full p-5 glass rounded-2xl outline-none border-none">
+                <input type="number" placeholder="المبلغ (Min 10$)" class="w-full p-5 glass rounded-2xl outline-none border-none">
+                <button class="w-full btn-main p-5 opacity-50">تأكيد السحب (معلق)</button>
+            </div>
+        </div>
+
+        <div id="page-team" class="page px-6 pt-10">
+            <div class="glass p-8 rounded-[32px] text-center mb-6">
+                <h3 class="text-xl font-bold mb-2">رابط الإحالة</h3>
+                <p class="text-xs text-gray-500 mb-6">احصل على عمولة 10% لكل صديق</p>
+                <div class="bg-green-500/10 p-4 rounded-xl border border-green-500/20 text-xs font-mono break-all mb-4">
+                    https://kfc-invest.com/ref/77321
+                </div>
+                <button class="text-green-500 font-bold underline">نسخ الرابط</button>
             </div>
         </div>
 
         <nav class="nav-bottom">
             <div class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-home text-xl block mb-1"></i>الرئيسية</div>
-            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-gem text-xl block mb-1"></i>VIP</div>
-            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-users text-xl block mb-1"></i>فريق</div>
-            <div class="nav-item" onclick="location.reload()"><i class="fas fa-user-circle text-xl block mb-1"></i>أنا</div>
+            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-plus-square text-xl block mb-1"></i>إيداع</div>
+            <div class="nav-item" onclick="switchPage('team', this)"><i class="fas fa-user-friends text-xl block mb-1"></i>فريق</div>
+            <div class="nav-item" onclick="switchPage('withdraw', this)"><i class="fas fa-wallet text-xl block mb-1"></i>سحب</div>
         </nav>
     </div>
 
@@ -103,25 +130,23 @@
         const _s = supabase.createClient(S_URL, S_KEY);
 
         const plans = [
-            { id: 1, cost: 100, daily: 15, name: "Starter-VIP" },
-            { id: 2, cost: 200, daily: 32, name: "Bronze-VIP" },
-            { id: 3, cost: 500, daily: 95, name: "Silver-VIP" },
-            { id: 4, cost: 1000, daily: 260, name: "Gold-VIP" }
+            { id: 1, cost: 100, daily: 15, img: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=100&h=100&fit=crop" },
+            { id: 2, cost: 300, daily: 55, img: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=100&h=100&fit=crop" },
+            { id: 3, cost: 500, daily: 110, img: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=100&h=100&fit=crop" },
+            { id: 4, cost: 1000, daily: 260, img: "https://images.unsplash.com/photo-1640344583441-739887396863?w=100&h=100&fit=crop" }
         ];
 
         function renderPlans() {
             document.getElementById('plans-container').innerHTML = plans.map(p => `
-                <div class="glass-card p-4 flex justify-between items-center border-r-4 border-r-green-500 shadow-xl">
+                <div class="glass p-5 flex justify-between items-center rounded-3xl shadow-xl hover:border-green-500/50 transition">
                     <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 bg-green-900/30 rounded-2xl flex items-center justify-center border border-green-700">
-                             <i class="fas fa-crown text-yellow-500"></i>
-                        </div>
+                        <img src="${p.img}" class="w-14 h-14 rounded-2xl object-cover shadow-lg">
                         <div>
-                            <p class="font-bold text-sm">${p.name}</p>
-                            <p class="text-[10px] text-green-500">الربح اليومي: $${p.daily}</p>
+                            <p class="font-black text-sm uppercase">VIP LEVEL ${p.id}</p>
+                            <p class="text-[10px] text-green-500 font-bold">عائد يومي: $${p.daily}</p>
                         </div>
                     </div>
-                    <button class="bg-green-600 px-4 py-2 rounded-xl text-[10px] font-black shadow-lg">تفعيل ($${p.cost})</button>
+                    <button class="btn-main px-6 py-3 text-[10px] shadow-lg shadow-green-500/20">تفعيل ($${p.cost})</button>
                 </div>
             `).join('');
         }
@@ -129,13 +154,15 @@
         async function handleAuth(type) {
             const e = document.getElementById('email').value;
             const p = document.getElementById('phone').value;
-            if(!e || !p) return alert("أكمل البيانات");
+            if(!e || !p) return alert("يرجى إكمال البيانات");
+            
             let { data: user } = await _s.from('users').select('*').eq('email', e).single();
             if (type === 'register') {
-                if (user) return alert("مسجل بالفعل");
+                if (user) return alert("الحساب موجود");
                 const { data: n } = await _s.from('users').insert([{ email:e, phone:p, balance:0 }]).select().single();
                 user = n;
-            } else { if (!user) return alert("غير موجود"); }
+            }
+            if (!user) return alert("بيانات خاطئة");
             localStorage.setItem('kfc_user_email', user.email);
             init(user);
         }
@@ -144,19 +171,34 @@
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('balance').innerText = u.balance.toFixed(2);
-            document.getElementById('display-phone').innerText = u.phone;
+            document.getElementById('user-p').innerText = "مرحباً: " + u.phone;
             renderPlans();
+            setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
         }
 
         function switchPage(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + pId).classList.add('active');
-            if(el) { document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            }
+        }
+
+        function copyAddr() {
+            navigator.clipboard.writeText("TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2");
+            alert("تم نسخ المحفظة بنجاح!");
         }
 
         window.onload = () => {
             const email = localStorage.getItem('kfc_user_email');
-            if(email) _s.from('users').select('*').eq('email', email).single().then(({data}) => data && init(data));
+            if(email) {
+                _s.from('users').select('*').eq('email', email).single().then(({data}) => {
+                    if(data) init(data); else document.getElementById('loader').style.display = 'none';
+                });
+            } else {
+                document.getElementById('loader').style.display = 'none';
+            }
         };
     </script>
 </body>
