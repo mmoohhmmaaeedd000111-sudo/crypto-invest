@@ -6,51 +6,32 @@
     <title>SHΔDØW INVEST</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #080808; color: white; margin: 0; padding: 0; }
-        .gold-text { color: #ffd700; font-weight: bold; }
-        .glass { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
-    </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-6">
-
-    <div id="auth-box" class="glass w-full max-w-md text-center">
-        <h1 class="text-3xl font-black gold-text mb-6">SHΔDØW INVEST</h1>
-        <div class="space-y-4">
-            <input id="email" type="email" placeholder="الجيميل" class="w-full p-4 bg-black rounded-xl border border-gray-800 text-white">
-            <input id="phone" type="tel" placeholder="رقم الهاتف" class="w-full p-4 bg-black rounded-xl border border-gray-800 text-white">
-            <button onclick="login()" class="w-full bg-yellow-600 p-4 rounded-xl font-bold text-black">دخول</button>
-        </div>
+<body class="bg-black text-white flex items-center justify-center min-h-screen">
+    <div id="auth" class="p-8 border border-yellow-600 rounded-2xl w-80 text-center">
+        <h1 class="text-2xl font-bold text-yellow-500 mb-6">دخول المستثمرين</h1>
+        <input id="e" type="email" placeholder="الجيميل" class="w-full p-2 mb-4 bg-zinc-900 border border-zinc-700 rounded">
+        <input id="p" type="tel" placeholder="الهاتف" class="w-full p-2 mb-6 bg-zinc-900 border border-zinc-700 rounded">
+        <button onclick="go()" class="w-full bg-yellow-600 p-2 rounded font-bold text-black">دخول</button>
     </div>
-
-    <div id="main-ui" style="display: none;" class="glass w-full max-w-md text-center">
-        <h2 class="text-xl">مرحباً بك</h2>
-        <p class="text-4xl font-bold text-green-500 my-4"><span id="balance">0.00</span> USDT</p>
-        <p class="text-gray-400">تواصل مع الأدمن لتفعيل الخطة</p>
+    <div id="pro" style="display:none" class="text-center p-8">
+        <h2 class="text-xl">رصيدك الحالي</h2>
+        <p class="text-5xl font-bold text-green-500 my-4"><span id="b">0.00</span> $</p>
+        <button class="bg-zinc-800 p-4 rounded text-sm">تواصل مع الإدارة لشحن الرصيد</button>
     </div>
-
     <script>
-        const SUPABASE_URL = 'https://jcrdagztrraffegnzyzs.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjcmRhZ3p0cnJhZmZlZ256eXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDE0MzEsImV4cCI6MjA4MjQxNzQzMX0.EiJ50ubReAYkfiOJgOth6NtBsuyUNwag80rJMsqgc4A';
-
-        // التأكد من تحميل المكتبة قبل بدء العمل
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        async function login() {
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-
-            if(!email || !phone) return alert("أكمل البيانات");
-
-            const { data, error } = await _supabase.from('users').upsert([{ email, phone, balance: 0 }], { onConflict: 'email' }).select().single();
-
-            if(error) {
-                alert("خطأ في الاتصال: " + error.message);
-            } else {
-                document.getElementById('auth-box').style.display = 'none';
-                document.getElementById('main-ui').style.display = 'block';
-                document.getElementById('balance').innerText = data.balance;
-            }
+        const S_URL = 'https://jcrdagztrraffegnzyzs.supabase.co';
+        const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjcmRhZ3p0cnJhZmZlZ256eXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDE0MzEsImV4cCI6MjA4MjQxNzQzMX0.EiJ50ubReAYkfiOJgOth6NtBsuyUNwag80rJMsqgc4A';
+        const _s = supabase.createClient(S_URL, S_KEY);
+        async function go() {
+            const e = document.getElementById('e').value;
+            const p = document.getElementById('p').value;
+            if(!e || !p) return alert("أدخل البيانات");
+            const { data, error } = await _s.from('users').upsert([{ email:e, phone:p, balance:0 }], { onConflict: 'email' }).select().single();
+            if(error) return alert("خطأ: " + error.message);
+            document.getElementById('auth').style.display = 'none';
+            document.getElementById('pro').style.display = 'block';
+            document.getElementById('b').innerText = data.balance;
         }
     </script>
 </body>
