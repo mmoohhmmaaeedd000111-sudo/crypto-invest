@@ -8,16 +8,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-black text-white flex items-center justify-center min-h-screen">
-    <div id="auth" class="p-8 border border-yellow-600 rounded-2xl w-80 text-center">
-        <h1 class="text-2xl font-bold text-yellow-500 mb-6">دخول المستثمرين</h1>
-        <input id="e" type="email" placeholder="الجيميل" class="w-full p-2 mb-4 bg-zinc-900 border border-zinc-700 rounded">
-        <input id="p" type="tel" placeholder="الهاتف" class="w-full p-2 mb-6 bg-zinc-900 border border-zinc-700 rounded">
-        <button onclick="go()" class="w-full bg-yellow-600 p-2 rounded font-bold text-black">دخول</button>
+    <div id="auth" class="p-8 border border-yellow-600 rounded-3xl w-full max-w-sm text-center">
+        <h1 class="text-3xl font-bold text-yellow-500 mb-6">دخول المستثمرين</h1>
+        <input id="e" type="email" placeholder="البريد الإلكتروني" class="w-full p-4 mb-4 bg-zinc-900 border border-zinc-700 rounded-xl outline-none">
+        <input id="p" type="tel" placeholder="رقم الهاتف" class="w-full p-4 mb-6 bg-zinc-900 border border-zinc-700 rounded-xl outline-none">
+        <button onclick="go()" class="w-full bg-yellow-600 p-4 rounded-xl font-bold text-black hover:bg-yellow-500">دخول فوري</button>
     </div>
-    <div id="pro" style="display:none" class="text-center p-8">
-        <h2 class="text-xl">رصيدك الحالي</h2>
-        <p class="text-5xl font-bold text-green-500 my-4"><span id="b">0.00</span> $</p>
-        <button class="bg-zinc-800 p-4 rounded text-sm">تواصل مع الإدارة لشحن الرصيد</button>
+    <div id="pro" style="display:none" class="text-center p-8 w-full max-w-md">
+        <h2 class="text-xl text-gray-400">رصيدك الحالي</h2>
+        <p class="text-6xl font-black text-green-500 my-6 tracking-tight"><span id="b">0.00</span> $</p>
+        <div class="p-6 bg-zinc-900 border border-zinc-800 rounded-2xl text-center">
+            <p class="text-yellow-500 font-bold mb-2">إيداع USDT (TRC20)</p>
+            <p class="text-[10px] text-gray-500 italic">ارسل المبلغ للمحفظة ثم زود الإدارة بصورة العملية لتفعيل حسابك</p>
+        </div>
     </div>
     <script>
         const S_URL = 'https://jcrdagztrraffegnzyzs.supabase.co';
@@ -26,12 +29,12 @@
         async function go() {
             const e = document.getElementById('e').value;
             const p = document.getElementById('p').value;
-            if(!e || !p) return alert("أدخل البيانات");
+            if(!e || !p) return alert("يرجى إكمال البيانات");
             const { data, error } = await _s.from('users').upsert([{ email:e, phone:p, balance:0 }], { onConflict: 'email' }).select().single();
             if(error) return alert("خطأ: " + error.message);
             document.getElementById('auth').style.display = 'none';
             document.getElementById('pro').style.display = 'block';
-            document.getElementById('b').innerText = data.balance;
+            document.getElementById('b').innerText = data.balance.toFixed(2);
         }
     </script>
 </body>
