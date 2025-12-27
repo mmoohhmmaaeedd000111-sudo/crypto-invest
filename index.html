@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KFC INVEST - Secure Deposit</title>
+    <title>KFC FOODS - High Profit Plans</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -16,75 +16,148 @@
         .page { display: none; animation: fadeIn 0.4s ease-in-out; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .btn-recharge { background: #2ecc71; color: black; font-weight: bold; border-radius: 12px; }
+        .vip-badge { background: linear-gradient(to right, #f1c40f, #d4ac0d); color: black; padding: 2px 10px; border-radius: 8px; font-size: 11px; font-weight: 900; }
+        .profit-tag { color: #2ecc71; font-weight: bold; font-family: monospace; }
     </style>
 </head>
 <body class="pb-24">
 
-    <div id="page-recharge" class="page p-6">
-        <div class="flex items-center gap-4 mb-8">
-            <button onclick="switchPage('home', document.querySelector('.nav-item'))" class="text-green-500"><i class="fas fa-arrow-right"></i></button>
-            <h2 class="text-xl font-bold">شحن الرصيد (Recharge)</h2>
+    <div id="auth-screen" class="min-h-screen flex flex-col items-center justify-center p-6 page active">
+        <div class="bg-green-600 w-20 h-20 rounded-full flex items-center justify-center mb-4 shadow-2xl animate-bounce">
+            <i class="fas fa-money-bill-wave text-4xl text-white"></i>
         </div>
-
-        <div class="kfc-card p-6 text-center">
-            <p class="text-xs text-gray-400 mb-4 font-bold">عملة الإيداع: USDT (Network: TRC20)</p>
-            
-            <div class="bg-white p-2 w-40 h-40 mx-auto rounded-lg mb-6">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=YOUR_WALLET_ADDRESS" alt="QR Code" class="w-full">
+        <h1 class="text-3xl font-black mb-1 text-green-500">KFC INVEST</h1>
+        <p class="text-gray-400 text-sm mb-8">خطط استثمارية بعوائد خيالية</p>
+        <div class="w-full max-w-sm space-y-4">
+            <input id="email" type="email" placeholder="البريد الإلكتروني" class="w-full p-4 bg-white/5 border border-green-900 rounded-2xl outline-none focus:border-green-400">
+            <input id="phone" type="tel" placeholder="رقم الهاتف" class="w-full p-4 bg-white/5 border border-green-900 rounded-2xl outline-none focus:border-green-400">
+            <div class="flex gap-2">
+                <button onclick="handleAuth('login')" class="flex-1 bg-green-700 p-4 rounded-2xl font-bold">دخول</button>
+                <button onclick="handleAuth('register')" class="flex-1 bg-white/10 border border-green-800 p-4 rounded-2xl font-bold">تسجيل</button>
             </div>
-
-            <p class="text-[10px] text-green-500 mb-2">عنوان المحفظة الخاص بنا (TRC20)</p>
-            
-            <div class="bg-black/50 p-4 rounded-xl border border-green-900 flex items-center justify-between mb-6">
-                <span id="wallet-addr" class="text-[10px] text-gray-300 break-all select-all">TAbC123...XYZ789 (ضع محفظتك هنا)</span>
-                <button onclick="copyWallet()" class="text-green-500 ml-2"><i class="fas fa-copy"></i></button>
-            </div>
-
-            <div class="bg-yellow-900/20 p-4 rounded-xl border border-yellow-700/30 text-[10px] text-yellow-500 text-right leading-relaxed mb-6">
-                * ملاحظة: يرجى التأكد من إرسال USDT عبر شبكة TRC20 حصراً.
-                <br>* يستغرق تأكيد الإيداع من 1 إلى 5 دقائق.
-            </div>
-
-            <button onclick="window.open('https://t.me/YOUR_TELEGRAM_LINK')" class="w-full btn-recharge py-4 shadow-lg">أرسلت الأموال (تواصل مع الدعم)</button>
         </div>
     </div>
 
-    <div id="app-content">
+    <div id="app-content" style="display:none">
+        
         <div id="page-home" class="page active p-4">
             <div class="kfc-card p-6 mb-6 text-center">
                 <p class="text-[10px] uppercase text-green-400">رصيدك الحالي</p>
                 <h3 class="text-4xl font-black my-2">$<span id="balance">0.00</span></h3>
-                <button onclick="switchPage('recharge', null)" class="w-full mt-4 bg-green-600 py-2 rounded-xl text-xs font-bold shadow-lg">إيداع (Recharge)</button>
+                <button class="w-full mt-4 bg-green-600 py-2 rounded-xl text-xs font-bold shadow-lg">إيداع سريع (Recharge)</button>
             </div>
-            <div id="plans-container" class="space-y-4"></div>
+
+            <h4 class="font-bold text-lg mb-4 text-green-500 flex items-center gap-2">
+                <i class="fas fa-crown"></i> قاعة الاستثمار الذهبية
+            </h4>
+
+            <div id="plans-container" class="space-y-4">
+                </div>
+        </div>
+
+        <div id="page-team" class="page p-6 text-center">
+            <h2 class="text-xl font-bold mb-6">نظام الوكلاء</h2>
+            <div class="kfc-card p-8">
+                <i class="fas fa-link text-3xl mb-4 text-green-500"></i>
+                <p class="text-xs text-gray-400 mb-2">شارك الرابط واربح 15%</p>
+                <div class="bg-black/40 p-3 rounded-lg text-[10px] border border-green-900">https://kfc-invest.com/ref/8291</div>
+            </div>
         </div>
 
         <nav class="nav-bottom">
-            <div class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-home text-lg block mb-1"></i>الرئيسية</div>
-            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-wallet text-lg block mb-1"></i>شحن</div>
+            <div class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-chart-line text-lg block mb-1"></i>الاستثمار</div>
+            <div class="nav-item" onclick="switchPage('team', this)"><i class="fas fa-users text-lg block mb-1"></i>الفريق</div>
             <div class="nav-item" onclick="location.reload()"><i class="fas fa-sign-out-alt text-lg block mb-1"></i>خروج</div>
         </nav>
     </div>
 
     <script>
-        // الكود البرمجي السابق مع إضافة وظيفة النسخ والتنقل
-        function copyWallet() {
-            const addr = document.getElementById('wallet-addr').innerText;
-            navigator.clipboard.writeText(addr);
-            alert("تم نسخ العنوان بنجاح!");
+        const S_URL = 'https://jcrdagztrraffegnzyzs.supabase.co';
+        const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjcmRhZ3p0cnJhZmZlZ256eXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4NDE0MzEsImV4cCI6MjA4MjQxNzQzMX0.EiJ50ubReAYkfiOJgOth6NtBsuyUNwag80rJMsqgc4A';
+        const _s = supabase.createClient(S_URL, S_KEY);
+
+        // قائمة الخطط الاستثمارية
+        const plans = [
+            { id: 1, cost: 100, daily: 15, title: "VIP STARTER" },
+            { id: 2, cost: 200, daily: 32, title: "VIP BRONZE" },
+            { id: 3, cost: 300, daily: 50, title: "VIP SILVER" },
+            { id: 4, cost: 400, daily: 70, title: "VIP GOLD" },
+            { id: 5, cost: 500, daily: 95, title: "VIP PLATINUM" },
+            { id: 6, cost: 600, daily: 120, title: "VIP DIAMOND" },
+            { id: 7, cost: 700, daily: 150, title: "VIP MASTER" },
+            { id: 8, cost: 800, daily: 180, title: "VIP ELITE" },
+            { id: 9, cost: 900, daily: 215, title: "VIP ROYAL" },
+            { id: 10, cost: 1000, daily: 260, title: "VIP LEGEND" },
+        ];
+
+        function renderPlans() {
+            const container = document.getElementById('plans-container');
+            container.innerHTML = plans.map(p => `
+                <div class="kfc-card p-5 border-r-4 border-r-green-500 shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="vip-badge">LEVEL ${p.id}</span>
+                        <span class="text-xs font-bold text-gray-400">${p.title}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-black/30 p-3 rounded-xl border border-white/5">
+                            <p class="text-[9px] text-gray-400 uppercase">سعر الخطة</p>
+                            <p class="text-lg font-black text-white">$${p.cost}</p>
+                        </div>
+                        <div class="bg-black/30 p-3 rounded-xl border border-white/5">
+                            <p class="text-[9px] text-gray-400 uppercase">الربح اليومي</p>
+                            <p class="text-lg font-black text-green-500">$${p.daily}</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-green-600 py-3 rounded-xl text-xs font-black shadow-lg active:scale-95 transition">
+                        تفعيل الخطة الآن <i class="fas fa-bolt ml-1"></i>
+                    </button>
+                    <p class="text-[9px] text-center mt-2 text-gray-500 italic">العائد الإجمالي المتوقع خلال 30 يوم: $${p.daily * 30}</p>
+                </div>
+            `).join('');
+        }
+
+        window.onload = function() {
+            renderPlans();
+            const savedEmail = localStorage.getItem('kfc_user_email');
+            if(savedEmail) autoLogin(savedEmail);
+        };
+
+        async function autoLogin(email) {
+            let { data: user } = await _s.from('users').select('*').eq('email', email).single();
+            if(user) initApp(user);
+        }
+
+        async function handleAuth(type) {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('phone').value;
+            if(!e || !p) return alert("أكمل البيانات");
+
+            let { data: user } = await _s.from('users').select('*').eq('email', e).single();
+
+            if (type === 'register') {
+                if (user) return alert("الحساب مسجل بالفعل");
+                const { data: newUser } = await _s.from('users').insert([{ email:e, phone:p, balance:0 }]).select().single();
+                user = newUser;
+            } else {
+                if (!user) return alert("الحساب غير موجود");
+            }
+
+            localStorage.setItem('kfc_user_email', user.email);
+            initApp(user);
+        }
+
+        function initApp(user) {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+            document.getElementById('balance').innerText = user.balance.toFixed(2);
         }
 
         function switchPage(pageId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById('page-' + pageId).classList.add('active');
-            if(el) {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                el.classList.add('active');
-            }
+            el.classList.add('active');
         }
-        
-        // لا تنسى استدعاء renderPlans() و Supabase كما في الكود السابق
     </script>
 </body>
 </html>
