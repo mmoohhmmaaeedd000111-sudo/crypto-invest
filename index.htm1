@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOLDEN CRYPTO | استثمار النخبة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #050505; color: white; font-family: sans-serif; }
+        .gold-border { border: 1px solid #d4af37; }
+        .gold-bg { background: linear-gradient(45deg, #d4af37, #f9d976); color: black; }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="text-center py-10">
+        <h1 class="text-4xl font-bold text-yellow-500 mb-2">GOLDEN CRYPTO 🔥</h1>
+        <p class="text-gray-400">نظام استثمار USDT الأكثر أماناً في 2024</p>
+    </div>
+
+    <div class="bg-zinc-900 p-6 rounded-2xl gold-border mb-8 shadow-2xl">
+        <h2 class="mb-4 text-xl font-semibold">تسجيل الدخول / اشتراك</h2>
+        <input type="email" placeholder="الجيميل" class="w-full mb-3 p-3 rounded bg-black border border-gray-700">
+        <input type="tel" placeholder="رقم الهاتف" class="w-full mb-3 p-3 rounded bg-black border border-gray-700">
+        <input type="password" placeholder="كلمة المرور" class="w-full mb-4 p-3 rounded bg-black border border-gray-700">
+        <button class="w-full gold-bg font-bold py-3 rounded-xl">دخول إلى المحفظة</button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-zinc-900 p-4 rounded-xl border border-gray-800 text-center">
+            <p class="text-gray-400 text-sm">رصيدك الحالي</p>
+            <p class="text-2xl font-bold text-green-500">0.00$</p>
+        </div>
+        <div class="bg-zinc-900 p-4 rounded-xl border border-gray-800 text-center">
+            <p class="text-gray-400 text-sm">أرباح اليوم</p>
+            <p class="text-2xl font-bold text-yellow-500">+0.00$</p>
+        </div>
+    </div>
+
+    <h2 class="text-xl font-bold mb-4">خطط الاستثمار المتاحة</h2>
+    <div class="space-y-4">
+        <div class="bg-zinc-900 p-5 rounded-2xl border-l-4 border-yellow-500 flex justify-between items-center">
+            <div>
+                <h3 class="font-bold">خطة البرونز</h3>
+                <p class="text-sm text-gray-400">ربح 5% يومياً لمدة شهر</p>
+            </div>
+            <button class="gold-bg px-4 py-2 rounded-lg text-sm font-bold italic">اشترك بـ 50$</button>
+        </div>
+        
+        <div class="bg-zinc-900 p-5 rounded-2xl border-l-4 border-yellow-500 flex justify-between items-center">
+            <div>
+                <h3 class="font-bold">خطة الملوك</h3>
+                <p class="text-sm text-gray-400">ربح 15% يومياً لمدة شهر</p>
+            </div>
+            <button class="gold-bg px-4 py-2 rounded-lg text-sm font-bold italic">اشترك بـ 500$</button>
+        </div>
+    </div>
+
+    <div class="mt-10 p-6 bg-yellow-500/10 rounded-2xl text-center">
+        <p class="text-yellow-500 mb-2 font-bold">لشحن الرصيد يدوياً (USDT TRC20)</p>
+        <p class="text-xs break-all text-gray-300">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p>
+        <p class="mt-2 text-sm">أرسل صورة التحويل للدعم الفني لتفعيل الخطة</p>
+    </div>
+
+</body>
+</html>
