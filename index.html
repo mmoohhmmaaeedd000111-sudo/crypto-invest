@@ -3,240 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KFC GLOBAL - المنصة الاحترافية</title>
+    <title>KFC GLOBAL - Login</title>
     
-    <meta property="og:title" content="منصة KFC GLOBAL للاستثمار">
-    <meta property="og:image" content="https://i.ibb.co/vz6pG8j/kfc-logo.png">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        :root { --primary: #00e676; --bg: #010806; }
-        body { background-color: var(--bg); color: #e0e0e0; font-family: 'Cairo', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --primary: #00e676; --bg: #050a09; }
+        body { background-color: var(--bg); color: #e0e0e0; font-family: 'Cairo', sans-serif; margin: 0; }
         
-        .glass-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; backdrop-filter: blur(10px); }
-        .btn-prime { background: linear-gradient(135deg, #00e676 0%, #00c853 100%); color: #000; font-weight: 900; }
+        /* شريط الأمان العلوي */
+        .secure-bar { background: linear-gradient(90deg, #062016 0%, #0a3d29 50%, #062016 100%); border-bottom: 1px solid #14533c; text-align: center; padding: 6px; font-size: 10px; font-weight: bold; color: #00e676; letter-spacing: 1px; }
+
+        /* حاوية تسجيل الدخول */
+        .login-container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle at center, #0a1f18 0%, #050a09 100%); }
         
-        .page { display: none; animation: slideUp 0.4s ease-out; }
-        .page.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        /* حقول الإدخال الاحترافية */
+        .auth-input { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(0, 230, 118, 0.2); padding: 18px; border-radius: 16px; width: 100%; color: white; outline: none; transition: 0.3s; text-align: center; font-size: 14px; }
+        .auth-input:focus { border-color: var(--primary); background: rgba(0, 230, 118, 0.05); box-shadow: 0 0 20px rgba(0, 230, 118, 0.1); }
 
-        .input-box { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 18px; width: 100%; color: white; outline: none; }
-        .input-box:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0,230,118,0.1); }
+        /* الزر العالمي */
+        .auth-btn { background: var(--primary); color: #051a14; font-weight: 900; padding: 18px; border-radius: 16px; width: 100%; transition: 0.3s; box-shadow: 0 10px 30px rgba(0, 230, 118, 0.2); }
+        .auth-btn:active { transform: scale(0.98); }
 
-        /* عداد الأرباح المتحرك */
-        .profit-grow { color: var(--primary); text-shadow: 0 0 10px rgba(0,230,118,0.3); transition: all 0.5s ease; }
-
-        /* زر تليجرام العائم */
-        .floating-tg { position: fixed; bottom: 100px; left: 20px; width: 50px; height: 50px; background: #229ED9; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(34,158,217,0.4); z-index: 9999; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .nav-active { color: var(--primary); filter: drop-shadow(0 0 5px var(--primary)); }
-        .modal-bg { background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); }
+        .logo-box { width: 100px; height: 100px; border-radius: 25px; background: #0c1a16; border: 1px solid rgba(0, 230, 118, 0.3); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        
+        .page { display: none; }
+        .active { display: block; }
     </style>
 </head>
 <body>
 
-    <a href="#" class="floating-tg"><i class="fab fa-telegram-plane text-2xl text-white"></i></a>
+    <div id="auth-screen" class="page active">
+        <div class="secure-bar">
+            <i class="fas fa-shield-alt ml-1"></i> SECURED BY CLOUDFLARE SSL <i class="fas fa-check-circle mr-1"></i>
+        </div>
 
-    <div id="live-toast" class="fixed bottom-24 right-5 bg-black/80 border-l-4 border-green-500 p-4 rounded-xl z-[10000] hidden">
-        <p id="toast-msg" class="text-[10px] font-bold text-white"></p>
+        <div class="login-container">
+            <div class="logo-box">
+                <img src="https://i.ibb.co/vz6pG8j/kfc-logo.png" alt="Logo" class="w-full h-full object-cover">
+            </div>
+
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-black text-white tracking-tight">KFC GLOBAL</h1>
+                <p class="text-gray-500 text-[11px] mt-2 italic">Your Path to Global Financial Growth</p>
+            </div>
+
+            <div class="w-full max-w-sm space-y-5">
+                <div class="relative">
+                    <input id="reg-name" type="text" placeholder="الاسم بالكامل" class="auth-input">
+                </div>
+                <div class="relative">
+                    <input id="reg-phone" type="tel" placeholder="رقم الهاتف" class="auth-input">
+                </div>
+                <button onclick="handleLogin()" class="auth-btn">
+                    بدء الاستثمار الآمن
+                </button>
+                
+                <p class="text-[9px] text-center text-gray-600 mt-6 leading-relaxed">
+                    باستخدامك للمنصة، أنت توافق على اتفاقية التشفير وحماية الأصول الدولية.
+                </p>
+            </div>
+        </div>
     </div>
 
-    <div id="auth-screen" class="page active min-h-screen flex flex-col p-10 justify-center">
-        <div class="text-center mb-10">
-            <img src="https://i.ibb.co/vz6pG8j/kfc-logo.png" class="w-24 h-24 mx-auto mb-6 rounded-[2rem] shadow-2xl border border-white/10">
-            <h1 class="text-3xl font-black tracking-tighter text-white">KFC GLOBAL</h1>
-            <div class="flex justify-center items-center gap-2 mt-2 text-[10px] text-gray-500 uppercase tracking-widest">
-                <i class="fas fa-shield-check text-green-500"></i> مؤمن بواسطة SSL Cloudflare
-            </div>
+    <div id="main-app" class="page min-h-screen bg-[#050a09] p-6 text-center">
+        <h1 class="text-white mt-20 text-2xl font-bold">مرحباً بك في لوحة التحكم</h1>
+        <p class="text-green-500 mt-4">جاري تحميل بياناتك...</p>
         </div>
-        <div class="space-y-4 max-w-sm mx-auto w-full">
-            <input id="reg-name" type="text" placeholder="الاسم بالكامل" class="input-box">
-            <input id="reg-phone" type="tel" placeholder="رقم الهاتف" class="input-box">
-            <button onclick="handleLogin()" class="w-full btn-prime p-5 rounded-2xl shadow-xl">بدء الاستثمار الآمن</button>
-        </div>
-    </div>
-
-    <div id="main-app" style="display:none">
-        
-        <div id="page-home" class="page active px-6 pt-10 pb-32">
-            <div class="flex justify-between items-center mb-6 px-2 text-[9px] text-gray-500 font-bold uppercase">
-                <span><i class="fas fa-lock text-green-500 ml-1"></i> اتصال مشفر</span>
-                <span>ID: <span id="user-id-disp">882910</span></span>
-            </div>
-
-            <div class="glass-card p-8 mb-8 text-center border-b-4 border-green-500 relative overflow-hidden">
-                <p class="text-[10px] text-gray-400 font-bold mb-2">رصيدك في نمو مستمر</p>
-                <h3 class="text-5xl font-black text-white italic">$<span id="balance-display" class="profit-grow">0.000</span></h3>
-                <div class="absolute top-0 right-0 p-2 opacity-10 text-6xl"><i class="fas fa-bolt"></i></div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-10">
-                <div class="glass-card p-4">
-                    <p class="text-[8px] text-gray-500 mb-1">إيداعات الشبكة</p>
-                    <p class="text-xs font-bold text-green-400">$2,410,000</p>
-                </div>
-                <div class="glass-card p-4">
-                    <p class="text-[8px] text-gray-500 mb-1">عدد المستثمرين</p>
-                    <p class="text-xs font-bold text-white">18,420</p>
-                </div>
-            </div>
-
-            <h4 class="text-sm font-black mb-4 flex items-center gap-2 pr-2 border-r-4 border-green-500">المهام الاستثمارية المتوفرة</h4>
-            <div id="plans-container" class="space-y-4"></div>
-        </div>
-
-        <div id="page-withdraw" class="page px-6 pt-10 pb-32">
-            <div class="glass-card p-8">
-                <h2 class="text-xl font-black text-white mb-6">بوابة السحب الآمنة</h2>
-                <div class="space-y-5">
-                    <div class="space-y-2">
-                        <label class="text-[10px] text-gray-500 mr-2">المبلغ (USDT)</label>
-                        <input id="w-amount" type="number" placeholder="أدخل المبلغ" class="input-box">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] text-gray-500 mr-2">رابط المحفظة (TRC20)</label>
-                        <input id="w-wallet" type="text" placeholder="Txxxxxxxx..." class="input-box">
-                    </div>
-                    <button onclick="requestWithdraw()" class="w-full btn-prime py-5 rounded-2xl">تقديم طلب السحب</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-profile" class="page px-6 pt-10 pb-32">
-            <div class="glass-card p-8 text-center mb-6">
-                <i class="fas fa-id-card-alt text-4xl text-green-400 mb-4"></i>
-                <h2 id="p-name" class="text-xl font-black"></h2>
-                <p id="p-phone" class="text-gray-500 text-xs"></p>
-            </div>
-
-            <h4 class="text-sm font-black mb-4 pr-2 border-r-4 border-blue-500">سجل العمليات الأخير</h4>
-            <div class="glass-card overflow-hidden">
-                <div class="divide-y divide-white/5 text-[10px]" id="history-list">
-                    <div class="p-4 flex justify-between"><span>مكافأة تسجيل</span><span class="text-green-400">+$5.00</span></div>
-                    <div class="p-4 flex justify-between text-gray-500 italic"><span>لا توجد سحوبات بعد</span></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="page-recharge" class="page px-6 pt-10 pb-32">
-            <div class="glass-card p-8 text-center">
-                <h2 class="text-lg font-black mb-6">إيداع USDT</h2>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-40 h-40 mx-auto rounded-3xl mb-6 bg-white p-2">
-                <button onclick="navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2');alert('تم النسخ!')" class="w-full bg-white/10 p-4 rounded-2xl text-[10px] font-mono mb-8">TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2</button>
-                <div class="text-right border-t border-white/5 pt-6">
-                    <p class="text-xs font-bold mb-4 italic text-green-500">تأكيد العملية</p>
-                    <input id="txid" type="text" placeholder="أدخل TxID هنا" class="input-box mb-4">
-                    <button onclick="alert('جاري التحقق من الشبكة... سيظهر الرصيد خلال 10 دقائق.')" class="w-full btn-prime py-4 rounded-xl">تفعيل الشحن</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="ticket-modal" class="fixed inset-0 z-[20000] hidden flex items-center justify-center p-6 modal-bg">
-            <div class="glass-card bg-[#010806] w-full max-w-sm p-8 text-center border-t-4 border-yellow-500">
-                <div class="w-16 h-16 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-clock text-2xl text-yellow-500"></i>
-                </div>
-                <h3 class="text-lg font-black mb-1">تذكرة سحب قيد الانتظار</h3>
-                <p class="text-[10px] text-gray-500 mb-6 font-mono" id="ticket-id"></p>
-                <div class="bg-black/40 p-4 rounded-2xl mb-8">
-                    <p class="text-[8px] uppercase text-gray-500 mb-1">وقت المعالجة المتوقع</p>
-                    <p class="text-2xl font-black text-white font-mono">17:45:22</p>
-                </div>
-                <button onclick="document.getElementById('ticket-modal').classList.add('hidden')" class="btn-prime w-full py-4 rounded-xl">فهمت ذلك</button>
-            </div>
-        </div>
-
-        <nav class="fixed bottom-0 w-full flex justify-around py-5 bg-black/95 border-t border-white/5 backdrop-blur-xl z-50">
-            <div class="nav-item active text-center" onclick="switchPage('home', this)"><i class="fas fa-home-alt text-xl block"></i><span class="text-[8px] font-bold mt-1 block">الرئيسية</span></div>
-            <div class="nav-item text-center" onclick="switchPage('withdraw', this)"><i class="fas fa-coins text-xl block"></i><span class="text-[8px] font-bold mt-1 block">سحب</span></div>
-            <div class="nav-item text-center" onclick="switchPage('recharge', this)"><i class="fas fa-plus-circle text-xl block"></i><span class="text-[8px] font-bold mt-1 block">إيداع</span></div>
-            <div class="nav-item text-center" onclick="switchPage('profile', this)"><i class="fas fa-user-shield text-xl block"></i><span class="text-[8px] font-bold mt-1 block">حسابي</span></div>
-        </nav>
-    </div>
 
     <script>
-        const tiers = [
-            { id: 1, cost: 100, daily: 15, name: "Silver Node", icon: "fas fa-microchip" },
-            { id: 2, cost: 300, daily: 55, name: "Gold Node", icon: "fas fa-server" },
-            { id: 3, cost: 600, daily: 130, name: "Diamond Node", icon: "fas fa-atom" }
-        ];
-
-        let balance = 0;
-
         function handleLogin() {
             const name = document.getElementById('reg-name').value;
             const phone = document.getElementById('reg-phone').value;
-            if(!name || !phone) return alert("يرجى إكمال البيانات الرسمية");
-            const user = { name, phone, balance: 5.00 }; // مكافأة تسجيل
-            localStorage.setItem('kfc_user', JSON.stringify(user));
-            startApp(user);
-        }
-
-        function startApp(u) {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            balance = u.balance;
-            document.getElementById('p-name').innerText = u.name;
-            document.getElementById('p-phone').innerText = u.phone;
-            renderPlans();
-            startProfitCounter();
-            startToasts();
-        }
-
-        function renderPlans() {
-            document.getElementById('plans-container').innerHTML = tiers.map(t => `
-                <div class="glass-card p-6 flex justify-between items-center active:scale-95 transition-all" onclick="alert('اشحن رصيدك لتفعيل ${t.name}')">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-green-400 shadow-inner"><i class="${t.icon} text-xl"></i></div>
-                        <div><p class="font-black text-xs text-white">${t.name}</p><p class="text-[9px] text-green-500">الربح اليومي: $${t.daily}</p></div>
-                    </div>
-                    <div class="text-right"><p class="text-white font-black">$${t.cost}</p><span class="text-[8px] text-gray-700 font-bold uppercase">USDT</span></div>
-                </div>
-            `).join('');
-        }
-
-        // عداد الأرباح المباشر
-        function startProfitCounter() {
-            setInterval(() => {
-                balance += 0.0001;
-                document.getElementById('balance-display').innerText = balance.toFixed(4);
-            }, 2000);
-        }
-
-        function switchPage(pId, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + pId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('nav-active'));
-            if(el) el.classList.add('nav-active');
-        }
-
-        function requestWithdraw() {
-            const amt = document.getElementById('w-amount').value;
-            const wall = document.getElementById('w-wallet').value;
-            if(!amt || !wall) return alert("يرجى ملء كافة البيانات");
             
-            document.getElementById('ticket-id').innerText = "TICKET ID: #" + Math.floor(Math.random()*999999);
-            document.getElementById('ticket-modal').classList.remove('hidden');
-        }
+            if(name.length < 3 || phone.length < 5) {
+                alert("يرجى إدخال بيانات صحيحة");
+                return;
+            }
 
-        function startToasts() {
-            const users = ["Omar***", "Sami***", "Laila***", "User77***", "Hassan***"];
-            setInterval(() => {
-                const toast = document.getElementById('live-toast');
-                document.getElementById('toast-msg').innerText = `تم سحب $${(Math.random()*400+10).toFixed(0)} بواسطة ${users[Math.floor(Math.random()*5)]} ✅`;
-                toast.classList.remove('hidden');
-                setTimeout(() => toast.classList.add('hidden'), 4000);
-            }, 12000);
+            // حفظ البيانات
+            localStorage.setItem('kfc_user', JSON.stringify({name, phone, balance: 5.00}));
+            
+            // الانتقال للواجهة الرئيسية
+            document.getElementById('auth-screen').classList.remove('active');
+            document.getElementById('main-app').classList.add('active');
+            
+            // هنا يمكنك توجيه المستخدم لصفحة الموقع الرئيسية أو تحديث الصفحة
+            alert("تم تسجيل الدخول بنجاح ✅");
         }
 
         window.onload = () => {
-            const saved = localStorage.getItem('kfc_user');
-            if(saved) startApp(JSON.parse(saved));
-        };
+            if(localStorage.getItem('kfc_user')) {
+                document.getElementById('auth-screen').classList.remove('active');
+                document.getElementById('main-app').classList.add('active');
+            }
+        }
     </script>
 </body>
 </html>
