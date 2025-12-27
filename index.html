@@ -3,29 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KFC GLOBAL - INVESTMENT SYSTEM</title>
+    <title>KFC GLOBAL - AI INVESTMENT PRO</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #00ff88; --bg: #050a08; --withdraw: #ff4d4d; }
-        body { background-color: var(--bg); color: white; font-family: 'Cairo', sans-serif; overflow-x: hidden; }
+        :root { --primary: #00ff88; --bg: #050a08; }
+        body { background-color: var(--bg); color: white; font-family: 'Cairo', sans-serif; overflow-x: hidden; margin: 0; }
         .glass { background: rgba(13, 26, 21, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(0, 255, 136, 0.1); }
         .nav-bottom { background: #050a08; position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid #1a3329; z-index: 5000; }
-        .nav-item { color: #4b6b5d; font-size: 11px; text-align: center; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--primary); }
+        .nav-item { color: #4b6b5d; font-size: 11px; text-align: center; cursor: pointer; flex: 1; transition: 0.3s; }
+        .nav-item.active { color: var(--primary); transform: translateY(-3px); }
         .page { display: none; padding-bottom: 120px; animation: slideUp 0.4s ease; }
         .page.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; padding: 20px; transition: 0.3s; }
+        /* Modal Style */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
         .btn-main { background: linear-gradient(45deg, #00ff88, #00bd65); color: #050a08; font-weight: 800; border-radius: 16px; width: 100%; padding: 15px; transition: 0.3s; }
         .btn-withdraw { background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.2); color: #ff4d4d; }
-        .btn-main:active, .btn-withdraw:active { transform: scale(0.95); }
-        .tier-card { background: rgba(13, 26, 21, 0.8); border: 1px solid rgba(255,255,255,0.05); border-right: 4px solid var(--primary); transition: 0.3s; cursor: pointer; }
+        .tier-card { background: rgba(13, 26, 21, 0.8); border: 1px solid rgba(255,255,255,0.05); border-right: 4px solid var(--primary); cursor: pointer; transition: 0.3s; }
+        .tier-card:active { transform: scale(0.97); }
+        input { transition: all 0.3s ease; }
+        input:focus { border-color: var(--primary) !important; box-shadow: 0 0 15px rgba(0, 255, 136, 0.1); }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
@@ -34,42 +35,63 @@
     <div id="tier-modal" class="modal-overlay" onclick="closeModal()">
         <div class="glass p-8 rounded-[35px] w-full max-w-sm text-center border-t-8 border-green-500 shadow-2xl" onclick="event.stopPropagation()">
             <div id="m-icon-box" class="w-20 h-20 bg-black/40 rounded-3xl flex items-center justify-center mx-auto mb-6"><i id="m-icon" class="text-4xl text-green-500"></i></div>
-            <h3 id="m-title" class="text-2xl font-black mb-2"></h3>
-            <div id="m-monthly" class="text-green-400 font-black mb-6"></div>
-            <div id="m-perks" class="text-right text-xs space-y-4 mb-8 text-gray-300"></div>
-            <button onclick="goToDeposit()" class="btn-main text-lg">اشتراك مباشر الآن <i class="fas fa-bolt ml-1"></i></button>
+            <h3 id="m-title" class="text-2xl font-black mb-2 uppercase italic text-white"></h3>
+            <div id="m-monthly" class="text-green-400 font-black mb-6 bg-green-500/10 py-2 rounded-full"></div>
+            <div id="m-perks" class="text-right text-xs space-y-4 mb-8 text-gray-300 border-b border-white/5 pb-6"></div>
+            <button onclick="goToDeposit()" class="btn-main text-lg shadow-xl">اشتراك مباشر الآن <i class="fas fa-bolt ml-1"></i></button>
+            <button onclick="closeModal()" class="mt-4 text-[10px] text-gray-600 font-bold uppercase tracking-widest">إغلاق</button>
         </div>
     </div>
 
-    <div id="auth-screen" class="page active px-8 flex flex-col justify-center min-h-screen">
-        <div class="text-center mb-10">
-            <h1 class="text-3xl font-black italic text-green-500">KFC SYSTEM</h1>
-            <p class="text-[10px] text-gray-500 mt-2 uppercase tracking-widest">Global AI Investment Hub</p>
+    <div id="auth-screen" class="page active px-8 flex flex-col justify-center min-h-screen relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div class="absolute top-10 left-10 w-32 h-32 bg-green-500 rounded-full blur-[80px]"></div>
+            <div class="absolute bottom-10 right-10 w-32 h-32 bg-green-500 rounded-full blur-[80px]"></div>
         </div>
-        <div class="space-y-4 max-w-sm mx-auto w-full">
-            <input id="reg-name" type="text" placeholder="الاسم الثلاثي" class="w-full p-4 bg-white/5 border border-white/10 rounded-2xl outline-none focus:border-green-500">
-            <input id="reg-email" type="email" placeholder="البريد الإلكتروني" class="w-full p-4 bg-white/5 border border-white/10 rounded-2xl outline-none focus:border-green-500">
-            <button onclick="handleLogin()" class="btn-main mt-4">فتح حساب المستثمر</button>
+
+        <div class="relative z-10 text-center mb-8">
+            <div class="w-20 h-20 bg-gradient-to-tr from-green-500 to-green-300 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-2xl rotate-12">
+                <i class="fas fa-shield-check text-3xl text-black -rotate-12"></i>
+            </div>
+            <h1 class="text-4xl font-black tracking-tighter text-white mb-2 italic">KFC <span class="text-green-500">PRO</span></h1>
+            <p class="text-sm text-gray-400 font-bold px-4 leading-relaxed">بوابة الاستثمار الذكي الأكثر أماناً <br> <span class="text-green-500 text-[10px] uppercase tracking-widest">Global AI Assets Protection</span></p>
+        </div>
+
+        <div class="glass p-8 rounded-[40px] border border-white/10 shadow-2xl space-y-5 max-w-sm mx-auto w-full relative">
+            <div class="space-y-4">
+                <input id="reg-name" type="text" placeholder="الاسم الثلاثي الكامل (كما في الهوية)" class="w-full p-4 bg-black/40 border border-white/5 rounded-2xl outline-none text-sm">
+                <input id="reg-email" type="email" placeholder="البريد الإلكتروني (Gmail)" class="w-full p-4 bg-black/40 border border-white/5 rounded-2xl outline-none text-sm">
+                <input id="reg-phone" type="tel" placeholder="رقم الهاتف مع رمز الدولة" class="w-full p-4 bg-black/40 border border-white/5 rounded-2xl outline-none text-sm">
+            </div>
+
+            <div class="bg-yellow-500/5 border border-yellow-500/20 p-3 rounded-2xl">
+                <p class="text-[9px] text-yellow-500 leading-tight">⚠️ يرجى التأكد من دقة المعلومات (الاسم الثلاثي ورقم الهاتف) حيث لا يمكن تعديلها لاحقاً وتستخدم لتوثيق عمليات السحب.</p>
+            </div>
+
+            <button onclick="handleLogin()" class="btn-main text-lg shadow-xl uppercase italic">بدء الاستثمار الآمن</button>
         </div>
     </div>
 
     <div id="main-app" style="display:none">
         <div id="page-home" class="page active px-5 pt-8">
             <div class="flex justify-between items-center mb-8">
-                <div><h2 id="display-name" class="text-lg font-black tracking-tight"></h2></div>
+                <div>
+                    <p class="text-[9px] text-green-500 font-bold uppercase tracking-widest">مستثمر نشط</p>
+                    <h2 id="display-name" class="text-lg font-black tracking-tight text-white"></h2>
+                </div>
                 <div class="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500 flex items-center justify-center"><i class="fas fa-fingerprint text-green-500"></i></div>
             </div>
 
             <div class="bg-gradient-to-br from-[#0d1a15] to-black p-8 rounded-[40px] mb-10 border border-white/5 shadow-2xl relative overflow-hidden text-center">
-                <p class="text-[10px] text-gray-500 uppercase font-bold mb-2">إجمالي الأرباح المتاحة</p>
+                <p class="text-[10px] text-gray-500 uppercase font-bold mb-2">إجمالي أرباح المحفظة المتاحة</p>
                 <h3 class="text-6xl font-black italic mb-8">$<span id="balance">0.00</span></h3>
                 
                 <div class="flex gap-3">
                     <button onclick="switchPage('recharge')" class="flex-1 bg-white/10 border border-white/5 p-4 rounded-2xl font-bold text-[11px] flex flex-col items-center gap-1">
-                        <i class="fas fa-bolt text-green-500"></i> شحن سريع
+                        <i class="fas fa-bolt text-green-500 text-lg"></i> شحن سريع
                     </button>
                     <button onclick="handleWithdrawRequest()" class="flex-1 btn-withdraw p-4 rounded-2xl font-bold text-[11px] flex flex-col items-center gap-1">
-                        <i class="fas fa-hand-holding-usd"></i> سحب الربح الحالي
+                        <i class="fas fa-hand-holding-usd text-lg"></i> سحب الربح الحالي
                     </button>
                 </div>
             </div>
@@ -79,64 +101,88 @@
         </div>
 
         <div id="page-recharge" class="page px-6 pt-10 text-center">
-            <div class="glass p-8 rounded-[40px]">
-                <h2 class="text-xl font-black mb-8 italic">مركز الشحن (USDT-TRC20)</h2>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-44 mx-auto mb-6 rounded-3xl border-4 border-white/5">
+            <div class="glass p-8 rounded-[40px] border border-green-500/20">
+                <h2 class="text-xl font-black mb-8 italic">مركز الشحن الآمن (TRC20)</h2>
+                <div class="bg-white p-4 w-44 h-44 mx-auto rounded-3xl mb-8 shadow-2xl">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2" class="w-full">
+                </div>
                 <div class="bg-black/40 p-5 rounded-2xl border border-white/5 font-mono text-[10px] mb-8 break-all">TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2</div>
-                <button onclick="navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2');alert('تم نسخ العنوان!')" class="btn-main shadow-xl">نسخ المحفظة</button>
+                <button onclick="navigator.clipboard.writeText('TLSr6df3gw3BU6uDjbXHEC2WNUTZKxQbK2');alert('تم نسخ عنوان المحفظة بنجاح!')" class="btn-main shadow-xl">نسخ عنوان المحفظة</button>
             </div>
         </div>
 
         <div id="page-profile" class="page px-6 pt-10">
-            <div class="glass p-8 rounded-[40px] space-y-4">
-                <h2 class="text-center font-black text-xl mb-4 text-green-500">بيانات المستثمر</h2>
-                <p class="text-sm"><b>الاسم:</b> <span id="p-name"></span></p>
-                <p class="text-sm"><b>الجيميل:</b> <span id="p-email"></span></p>
-                <button onclick="localStorage.clear(); location.reload();" class="w-full p-4 mt-6 bg-red-900/10 text-red-500 rounded-2xl font-bold">خروج</button>
+            <div class="glass p-8 rounded-[40px] space-y-6">
+                <h2 class="text-center font-black text-xl mb-4 text-green-500">معلومات الحساب الموثق</h2>
+                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
+                    <i class="fas fa-id-badge text-green-500 text-xl"></i>
+                    <div><p class="text-[10px] text-gray-500 uppercase">الاسم الكامل</p><p id="p-name" class="font-bold text-sm text-white"></p></div>
+                </div>
+                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
+                    <i class="fas fa-envelope text-green-500 text-xl"></i>
+                    <div><p class="text-[10px] text-gray-500 uppercase">البريد الإلكتروني</p><p id="p-email" class="font-bold text-sm text-white"></p></div>
+                </div>
+                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl">
+                    <i class="fas fa-phone text-green-500 text-xl"></i>
+                    <div><p class="text-[10px] text-gray-500 uppercase">رقم الهاتف</p><p id="p-phone" class="font-bold text-sm text-white"></p></div>
+                </div>
+                <button onclick="localStorage.clear(); location.reload();" class="w-full p-4 mt-6 bg-red-900/10 text-red-500 border border-red-900/20 rounded-2xl font-bold text-xs uppercase tracking-widest">تسجيل الخروج الآمن</button>
             </div>
         </div>
 
         <nav class="nav-bottom">
             <div class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-rocket text-xl block mb-1"></i>الخطط</div>
-            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-wallet text-xl block mb-1"></i>شحن</div>
+            <div class="nav-item" onclick="switchPage('recharge', this)"><i class="fas fa-wallet text-xl block mb-1"></i>إيداع</div>
             <div class="nav-item" onclick="switchPage('profile', this)"><i class="fas fa-user-shield text-xl block mb-1"></i>حسابي</div>
+            <div class="nav-item" onclick="location.href='mailto:USDT@gmail.com'"><i class="fas fa-headset text-xl block mb-1"></i>الدعم</div>
         </nav>
     </div>
 
     <script>
         const tiers = [
-            { id: 1, cost: 100, daily: 15, monthly: 450, name: "Platinum Layer", icon: "fas fa-shield-alt", perks: ["عائد يومي ثابت: $15", "سحب أسبوعي", "دعم فني 24/7"] },
-            { id: 2, cost: 300, daily: 55, monthly: 1650, name: "Diamond Layer", icon: "fas fa-gem", perks: ["عائد يومي ثابت: $55", "سحب مرتين أسبوعياً", "حماية أصول متقدمة"] },
-            { id: 3, cost: 600, daily: 130, monthly: 3900, name: "Emerald Tier", icon: "fas fa-crown", perks: ["عائد يومي ثابت: $130", "سحب فوري يومي", "تأمين كامل للإيداع"] }
+            { id: 1, cost: 100, daily: 15, monthly: 450, name: "Platinum Layer", icon: "fas fa-shield-alt", perks: ["عائد يومي ثابت: $15", "نظام حماية الأصول المستوى 1", "دعم فني عبر البريد", "سحب أرباح أسبوعي"] },
+            { id: 2, cost: 300, daily: 55, monthly: 1650, name: "Diamond Layer", icon: "fas fa-gem", perks: ["عائد يومي ثابت: $55", "نظام حماية الأصول المستوى 2", "مدير حساب AI خاص", "سحب مرتين أسبوعياً"] },
+            { id: 3, cost: 600, daily: 130, monthly: 3900, name: "Emerald Tier", icon: "fas fa-crown", perks: ["عائد يومي ثابت: $130", "نظام حماية الأصول المستوى 3", "تأمين كامل على الإيداع", "سحب فوري يومي"] }
         ];
 
         function handleLogin() {
             const name = document.getElementById('reg-name').value;
             const email = document.getElementById('reg-email').value;
-            if(!name || !email) return alert("أكمل البيانات");
-            const user = { name, email, balance: 0 };
-            localStorage.setItem('kfc_user', JSON.stringify(user));
-            startApp(user);
+            const phone = document.getElementById('reg-phone').value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (name.trim().split(" ").length < 3) return alert("⚠️ يرجى إدخال اسمك الثلاثي الحقيقي.");
+            if (!emailPattern.test(email)) return alert("⚠️ يرجى إدخال بريد إلكتروني صحيح.");
+            if (phone.length < 8) return alert("⚠️ يرجى إدخال رقم هاتف حقيقي.");
+
+            const confirmData = confirm(`تأكيد نهائي لبياناتك:\n\nالاسم: ${name}\nالهاتف: ${phone}\n\nهل قمت بحفظ هذه المعلومات؟ لن تتمكن من تعديلها لاحقاً.`);
+            
+            if(confirmData) {
+                const user = { name, email, phone, balance: 0 };
+                localStorage.setItem('kfc_user', JSON.stringify(user));
+                startApp(user);
+            }
         }
 
         function startApp(u) {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
-            document.getElementById('display-name').innerText = "مرحباً، " + u.name;
+            document.getElementById('display-name').innerText = "مرحباً، " + u.name.split(" ")[0];
             document.getElementById('balance').innerText = u.balance.toFixed(2);
             document.getElementById('p-name').innerText = u.name;
             document.getElementById('p-email').innerText = u.email;
+            document.getElementById('p-phone').innerText = u.phone;
             renderPlans();
         }
 
         function renderPlans() {
             document.getElementById('plans-container').innerHTML = tiers.map(t => `
-                <div class="tier-card p-6 rounded-[25px] flex justify-between items-center shadow-lg" onclick="openModal(${t.id})">
+                <div class="tier-card p-6 rounded-[30px] flex justify-between items-center shadow-lg" onclick="openModal(${t.id})">
                     <div class="flex items-center gap-4">
-                        <i class="${t.icon} text-2xl text-green-500"></i>
-                        <div><p class="font-black text-sm uppercase">${t.name}</p><p class="text-green-500 text-[10px] font-bold">الربح: $${t.daily} يومياً</p></div>
+                        <div class="w-12 h-12 rounded-xl bg-black/40 flex items-center justify-center border border-white/5"><i class="${t.icon} text-xl text-green-500"></i></div>
+                        <div><p class="font-black text-sm uppercase text-white">${t.name}</p><p class="text-green-500 text-[10px] font-bold tracking-widest">الربح: $${t.daily}/يوم</p></div>
                     </div>
-                    <p class="font-black text-white">$${t.cost}</p>
+                    <div class="text-right"><p class="text-[8px] text-gray-500 uppercase">قيمة العقد</p><p class="font-black text-white">$${t.cost}</p></div>
                 </div>
             `).join('');
         }
@@ -145,20 +191,20 @@
             const t = tiers.find(x => x.id === id);
             document.getElementById('m-title').innerText = t.name;
             document.getElementById('m-icon').className = t.icon;
-            document.getElementById('m-monthly').innerText = "الربح الشهري: $" + t.monthly;
+            document.getElementById('m-monthly').innerText = "عائد شهري متوقع: $" + t.monthly;
             document.getElementById('m-perks').innerHTML = t.perks.map(p => `<div><i class="fas fa-check-circle ml-2 text-green-500"></i> ${p}</div>`).join('');
             document.getElementById('tier-modal').classList.add('active');
         }
 
         function closeModal() { document.getElementById('tier-modal').classList.remove('active'); }
         function goToDeposit() { closeModal(); switchPage('recharge'); }
-        
+
         function handleWithdrawRequest() {
             const currentBalance = parseFloat(document.getElementById('balance').innerText);
             if(currentBalance <= 0) {
-                alert("عذراً، رصيد الأرباح الحالي 0.00. يرجى الاشتراك في خطة لبدء توليد الأرباح.");
+                alert("⚠️ لا يوجد أرباح حالية للسحب. يرجى تفعيل خطة استثمارية أولاً.");
             } else {
-                alert("تم استلام طلب السحب. سيتم التحقق من العملية وتحويل الأرباح لمحفظتك خلال 24 ساعة.");
+                alert("✅ تم استلام طلب السحب. سيتم مراجعة البيانات وتحويل المبلغ لمحفظتك خلال 24 ساعة.");
             }
         }
 
